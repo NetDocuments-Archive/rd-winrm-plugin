@@ -1,0 +1,41 @@
+name: rd-winrm-plugin
+version: 0.1.0
+rundeckPluginVersion: 1.0
+author: Volodymyr Babchynskyy
+date: 20.08.2015
+providers:
+  - name: WinRMexe
+    title: WinRM PS Executor
+    description: Executing PowerShell Scripts or commands on remote windows computer
+    service: NodeExecutor
+    plugin-type: script
+#    script-interpreter: []
+    script-file: winrmexe.rb
+#    script-args: ${config.realm} ${config.username} ${config.password} ${node.hostname} ${exec.command}
+    interpreter-args-quoted: true
+    config:
+      - name: realm
+        title: Kerberos Realm
+        type: String
+        required: false
+        description: "Kerberos Realm FQDN in capital letters"
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "realm"
+      - name: username
+        title: Username
+        type: String
+        required: true
+        description: "Username in DOMAIN/name form"
+        scope: Instance 
+        renderingOptions:
+          instance-scope-node-attribute: "realm"
+      - name: password
+        title: Password
+        type: String
+        required: true
+        description: "Password"
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "realm"
+
