@@ -8,7 +8,9 @@ endpoint = "http://#{host}:5985/wsman"
 
 # command = 'ipconfig'
 
+
 puts 'variables is:'
+#  puts "realm is #{realm}"
 puts "endpoint is #{endpoint}"
 puts "user is #{user}"
 puts "pass is #{pass}"
