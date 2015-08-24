@@ -8,6 +8,7 @@ endpoint = "http://#{host}:5985/wsman"
 
 # command = 'ipconfig'
 
+newcommand = command.gsub(/'"'"'/, '')
 
 puts 'variables is:'
 #  puts "realm is #{realm}"
