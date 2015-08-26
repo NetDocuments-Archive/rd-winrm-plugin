@@ -7,7 +7,10 @@ file = ARGV[1]
 dest = ARGV[2]
 endpoint = "http://#{host}:5985/wsman"
 
+dest = dest.gsub(/\.sh/, '.ps1') if /\/tmp\/.*\.sh/.match(dest)
+
 winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, :disable_sspi => true)
+winrm.set_timeout(60000)
 file_manager = WinRM::FS::FileManager.new(winrm)
 
 # upload file.txt from the current working directory
