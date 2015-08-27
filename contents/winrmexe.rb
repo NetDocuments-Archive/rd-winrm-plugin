@@ -5,6 +5,7 @@ pass = ENV['RD_CONFIG_PASSWORD']
 host = ENV['RD_NODE_HOSTNAME']
 command = ENV['RD_EXEC_COMMAND']
 endpoint = "http://#{host}:5985/wsman"
+output = ''
 
 # command = 'ipconfig'
 
@@ -26,10 +27,26 @@ puts "pass is #{pass}"
 puts "command is #{command}"
 puts newcommand
 
-winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, :disable_sspi => true)
-winrm.set_timeout(60000)
-winrm.powershell(newcommand) do |stdout, stderr|
-  STDOUT.print stdout
-  STDERR.print stderr
+def stderr_text (stderr)
+  doc = REXML::Document.new(stderr)
+  text = doc.root.get_elements('//S').map(&:text).join
+  text.gsub(/_x(\h\h\h\h)_/) do
+    code = Regexp.last_match[1]
+    code.hex.chr
+  end
 end
 
+winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, :disable_sspi => true)
+winrm.set_timeout(60000)
+result = winrm.powershell(newcommand)
+result[:data].each do |output_line|
+    output = "#{output}#{output_line[:stderr]}" if output_line.has_key?(:stderr)
+      STDOUT.print output_line[:stdout] if output_line.has_key?(:stdout)
+end
+STDERR.print stderr_text(output) if output != ''
+exit result[:exitcode] if result[:exitcode] != 0
+
+#winrm.powershell(newcommand) do |stdout, stderr|
+#  STDOUT.print stdout
+#  STDERR.print stderr
+#end
