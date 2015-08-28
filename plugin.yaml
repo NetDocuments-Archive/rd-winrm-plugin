@@ -1,8 +1,8 @@
 name: rd-winrm-plugin
-version: 0.4.0
+version: 0.5.0
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
-date: 26.08.2015
+date: 28.08.2015
 providers:
   - name: WinRMexe
     title: WinRM PS Executor
@@ -14,30 +14,31 @@ providers:
 #    script-args: ${config.realm} ${config.username} ${config.password} ${node.hostname} ${exec.command}
     interpreter-args-quoted: true
     config:
-      - name: realm
+      - name: krb5_realm
         title: Kerberos Realm
         type: String
         required: false
         description: "Kerberos Realm FQDN in capital letters"
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "realm"
-      - name: username
+          instance-scope-node-attribute: "krb5_realm"
+      - name: user
         title: Username
-        type: String
-        required: true
         description: "Username in DOMAIN/name form"
+        type: String
+        required: false
         scope: Instance 
         renderingOptions:
-          instance-scope-node-attribute: "realm"
-      - name: password
+          instance-scope-node-attribute: "user"
+      - name: pass
         title: Password
-        type: String
-        required: true
         description: "Password"
+        type: String
+        required: false
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "realm"
+          displayType: PASSWORD
+
   - name: WinRMcp
     title: WinRM File Copier
     service: FileCopier
@@ -46,28 +47,28 @@ providers:
     script-file: winrmcp.rb
     script-args: ${node.hostname} ${file-copy.file} ${file-copy.destination}
     config:
-      - name: realm
+      - name: krb5_realm
         title: Kerberos Realm
         type: String
         required: false
         description: "Kerberos Realm FQDN in capital letters"
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "realm"
-      - name: username
+          instance-scope-node-attribute: "krb5_realm"
+      - name: user
         title: Username
         type: String
         required: true
         description: "Username in DOMAIN/name form"
         scope: Instance 
         renderingOptions:
-          instance-scope-node-attribute: "realm"
-      - name: password
+          instance-scope-node-attribute: "user"
+      - name: pass
         title: Password
         type: String
         required: true
         description: "Password"
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "realm"
+          displayType: PASSWORD
 
