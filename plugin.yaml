@@ -1,8 +1,8 @@
 name: rd-winrm-plugin
-version: 0.5.0
+version: 0.6.0
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
-date: 28.08.2015
+date: 01.09.2015
 providers:
   - name: WinRMexe
     title: WinRM PS Executor
@@ -38,6 +38,16 @@ providers:
         scope: Instance
         renderingOptions:
           displayType: PASSWORD
+      - name: authtype
+        title: Auth type
+        description: "Autentification type"
+        type: Select
+        values: "kerberos, plaintext, ssl"
+        default: "plaintext"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "authtype"
 
   - name: WinRMcp
     title: WinRM File Copier
@@ -71,4 +81,14 @@ providers:
         scope: Instance
         renderingOptions:
           displayType: PASSWORD
+      - name: authtype
+        title: Auth type
+        description: "Autentification type"
+        type: Select
+        values: "kerberos, plaintext, ssl"
+        default: "plaintext"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "authtype"
 

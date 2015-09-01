@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require 'winrm'
+auth = ENV['RD_CONFIG_AUTHTYPE']
 user = ENV['RD_CONFIG_USER']
 pass = ENV['RD_CONFIG_PASS'].dup # for some reason this string is frozen, so we duplicate it
 host = ENV['RD_NODE_HOSTNAME']
@@ -47,7 +48,17 @@ def stderr_text (stderr)
   end
 end
 
-winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, :disable_sspi => true)
+case auth
+  when 'kerberos'
+    winrm = WinRM::WinRMWebService.new(endpoint, :kerberos, :realm => realm)
+  when 'plaintext'
+    winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, :disable_sspi => true)
+  when 'ssl'
+    winrm = WinRM::WinRMWebService.new(endpoint, :ssl, :user => user, :pass => pass, :disable_sspi => true)
+  else
+    raise "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
+end
+
 winrm.set_timeout(60000)
 
 result = winrm.powershell(newcommand)
@@ -63,3 +74,4 @@ exit result[:exitcode] if result[:exitcode] != 0
 #  STDOUT.print stdout
 #  STDERR.print stderr
 #end
+

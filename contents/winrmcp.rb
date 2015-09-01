@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require 'winrm-fs'
+auth = ENV['RD_CONFIG_AUTHTYPE']
 user = ENV['RD_CONFIG_USER']
 pass = ENV['RD_CONFIG_PASS'].dup
 host = ENV['RD_NODE_HOSTNAME']
@@ -11,7 +12,17 @@ endpoint = "http://#{host}:5985/wsman"
 
 dest = dest.gsub(/\.sh/, '.ps1') if /\/tmp\/.*\.sh/.match(dest)
 
-winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, :disable_sspi => true)
+case auth
+  when 'kerberos'
+    winrm = WinRM::WinRMWebService.new(endpoint, :kerberos, :realm => realm)
+  when 'plaintext'
+    winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, :disable_sspi => true)
+  when 'ssl'
+    winrm = WinRM::WinRMWebService.new(endpoint, :ssl, :user => user, :pass => pass, :disable_sspi => true)
+  else
+    raise "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
+end
+
 winrm.set_timeout(60000)
 
 file_manager = WinRM::FS::FileManager.new(winrm)
