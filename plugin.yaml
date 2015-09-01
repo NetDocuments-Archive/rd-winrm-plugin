@@ -1,12 +1,12 @@
 name: rd-winrm-plugin
-version: 0.6.0
+version: 0.7.0
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
 date: 01.09.2015
 providers:
   - name: WinRMexe
-    title: WinRM PS Executor
-    description: Executing PowerShell Scripts or commands on remote windows computer
+    title: WinRM Executor
+    description: Executing Scripts or commands on remote windows computer
     service: NodeExecutor
     plugin-type: script
 #    script-interpreter: []
@@ -48,6 +48,16 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "authtype"
+      - name: shell
+        title: Shell
+        description: "Windows interpreter"
+        type: Select
+        values: "cmd, powershell, wql"
+        default: 'powershell'
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "interpreter"
 
   - name: WinRMcp
     title: WinRM File Copier

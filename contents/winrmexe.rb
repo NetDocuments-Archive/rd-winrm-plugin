@@ -4,6 +4,7 @@ auth = ENV['RD_CONFIG_AUTHTYPE']
 user = ENV['RD_CONFIG_USER']
 pass = ENV['RD_CONFIG_PASS'].dup # for some reason this string is frozen, so we duplicate it
 host = ENV['RD_NODE_HOSTNAME']
+shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 command = ENV['RD_EXEC_COMMAND']
 endpoint = "http://#{host}:5985/wsman"
@@ -61,7 +62,14 @@ end
 
 winrm.set_timeout(60000)
 
-result = winrm.powershell(newcommand)
+case shell
+  when 'powershell'
+    result = winrm.powershell(newcommand)
+  when 'cmd'
+    result = winrm.cmd(newcommand)
+  when 'wql'
+    result = winrm.wql(newcommand)
+end
 result[:data].each do |output_line|
     output = "#{output}#{output_line[:stderr]}" if output_line.has_key?(:stderr)
       STDOUT.print output_line[:stdout] if output_line.has_key?(:stdout)
@@ -75,3 +83,17 @@ exit result[:exitcode] if result[:exitcode] != 0
 #  STDERR.print stderr
 #end
 
+# result = winrm.cmd(command)
+# if result[:exitcode] != 0
+#    result[:data].each do |output_line|
+#          if output_line.has_key?(:stderr)
+#                  STDOUT.print output_line[:stderr]
+#                      end
+#            end
+# else
+#    result[:data].each do |output_line|
+#          if output_line.has_key?(:stdout)
+#                  STDOUT.print output_line[:stdout]
+#                      end
+#            end
+# end
