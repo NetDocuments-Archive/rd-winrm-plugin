@@ -24,7 +24,7 @@ case auth
     raise "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
 end
 
-winrm.set_timeout(winrmtimeout) if winrmtimeout != ''
+winrm.set_timeout(winrmtimeout.to_i) if winrmtimeout != ''
 
 file_manager = WinRM::FS::FileManager.new(winrm)
 

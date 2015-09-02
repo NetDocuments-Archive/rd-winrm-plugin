@@ -1,8 +1,8 @@
 name: rd-winrm-plugin
-version: 0.8.0
+version: 0.8.1
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
-date: 02.00.2015
+date: 03.00.2015
 providers:
   - name: WinRMexe
     title: WinRM Executor
@@ -61,8 +61,8 @@ providers:
       - name: winrmtimeout
         title: WinRM timeout
         description: "timeout in seconds default: 60"
-        type: String
-        required: true
+        type: Integer
+        required: false
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "winrmtimeout"
@@ -86,7 +86,7 @@ providers:
       - name: user
         title: Username
         type: String
-        required: true
+        required: false
         description: "Username in DOMAIN/name form"
         scope: Instance 
         renderingOptions:
@@ -94,7 +94,7 @@ providers:
       - name: pass
         title: Password
         type: String
-        required: true
+        required: false
         description: "Password"
         scope: Instance
         renderingOptions:
@@ -112,8 +112,8 @@ providers:
       - name: winrmtimeout
         title: WinRM timeout
         description: "timeout in seconds default: 60"
-        type: String
-        required: true
+        type: Integer
+        required: false
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "winrmtimeout"
