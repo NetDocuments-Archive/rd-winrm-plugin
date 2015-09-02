@@ -7,6 +7,7 @@ host = ENV['RD_NODE_HOSTNAME']
 shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 command = ENV['RD_EXEC_COMMAND']
+winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
 endpoint = "http://#{host}:5985/wsman"
 output = ''
 
@@ -60,7 +61,7 @@ case auth
     raise "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
 end
 
-winrm.set_timeout(60000)
+winrm.set_timeout(winrmtimeout) if winrmtimeout != ''
 
 case shell
   when 'powershell'

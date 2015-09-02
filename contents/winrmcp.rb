@@ -5,6 +5,7 @@ user = ENV['RD_CONFIG_USER']
 pass = ENV['RD_CONFIG_PASS'].dup
 host = ENV['RD_NODE_HOSTNAME']
 realm = ENV['RD_CONFIG_KRB5_REALM']
+winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
 
 file = ARGV[1]
 dest = ARGV[2]
@@ -23,7 +24,7 @@ case auth
     raise "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
 end
 
-winrm.set_timeout(60000)
+winrm.set_timeout(winrmtimeout) if winrmtimeout != ''
 
 file_manager = WinRM::FS::FileManager.new(winrm)
 

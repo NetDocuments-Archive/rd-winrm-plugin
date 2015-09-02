@@ -1,8 +1,8 @@
 name: rd-winrm-plugin
-version: 0.7.0
+version: 0.8.0
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
-date: 01.09.2015
+date: 02.00.2015
 providers:
   - name: WinRMexe
     title: WinRM Executor
@@ -58,6 +58,14 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "interpreter"
+      - name: winrmtimeout
+        title: WinRM timeout
+        description: "timeout in seconds default: 60"
+        type: String
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "winrmtimeout"
 
   - name: WinRMcp
     title: WinRM File Copier
@@ -101,4 +109,12 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "authtype"
+      - name: winrmtimeout
+        title: WinRM timeout
+        description: "timeout in seconds default: 60"
+        type: String
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "winrmtimeout"
 
