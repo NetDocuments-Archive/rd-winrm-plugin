@@ -13,16 +13,20 @@ output = ''
 
 # Wrapper ro avoid strange and undocumented behavior of rundeck
 # Should be deleted after rundeck fix
-newcommand = command.gsub(/'"'"'/, '')
+#  ''"'"'
+command = command.gsub(/'"'"'' /, '\'')
+command = command.gsub(/ ''"'"'/, '\'')
+command = command.gsub(/ '"/, '"')
+command = command.gsub(/"' /, '"')
 
 # Wrapper for avoid unix style file copying in command run
 # not accept chmod call
 # replace rm -f into rm -force
 # auto copying renames file from .sh into .ps1
 # so in that case we should call file with ps1 extension
-exit 0 if newcommand.include? 'chmod +x /tmp/'
-newcommand = newcommand.gsub(/rm -f \/tmp\//, 'rm -force /tmp/') if newcommand.include? 'rm -f /tmp/'
-newcommand = newcommand.gsub(/\.sh/, '.ps1') if /\/tmp\/.*\.sh/.match(newcommand)
+exit 0 if command.include? 'chmod +x /tmp/'
+command = command.gsub(/rm -f \/tmp\//, 'rm -force /tmp/') if command.include? 'rm -f /tmp/'
+command = command.gsub(/\.sh/, '.ps1') if /\/tmp\/.*\.sh/.match(command)
 
 # TODO: ENV['WINRM_LOG'] = '' or 'debug, info, warn, or error'
 
@@ -32,12 +36,12 @@ newcommand = newcommand.gsub(/\.sh/, '.ps1') if /\/tmp\/.*\.sh/.match(newcommand
   puts "endpoint is #{endpoint}"
   puts "user is #{user}"
   puts "pass is #{pass}"
-  puts "command is #{command}"
-  puts "newcommand is #{newcommand}"
+  puts "command is #{ENV['RD_EXEC_COMMAND']}"
+  puts "newcommand is #{command}"
 
   puts "ENV"
   ENV.each do |k,v|
-    puts "'key' => #{k}, 'value' => #{v}"
+    puts "#{k} => #{v}"
   end
 #end
 
@@ -65,11 +69,11 @@ winrm.set_timeout(winrmtimeout.to_i) if winrmtimeout != ''
 
 case shell
   when 'powershell'
-    result = winrm.powershell(newcommand)
+    result = winrm.powershell(command)
   when 'cmd'
-    result = winrm.cmd(newcommand)
+    result = winrm.cmd(command)
   when 'wql'
-    result = winrm.wql(newcommand)
+    result = winrm.wql(command)
 end
 result[:data].each do |output_line|
     output = "#{output}#{output_line[:stderr]}" if output_line.has_key?(:stderr)
@@ -79,7 +83,7 @@ STDERR.print stderr_text(output) if output != ''
 exit result[:exitcode] if result[:exitcode] != 0
 
 
-#winrm.powershell(newcommand) do |stdout, stderr|
+#winrm.powershell(command) do |stdout, stderr|
 #  STDOUT.print stdout
 #  STDERR.print stderr
 #end
