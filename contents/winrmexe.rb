@@ -30,7 +30,7 @@ command = command.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(command)
 
 # TODO: ENV['WINRM_LOG'] = '' or 'debug, info, warn, or error'
 
-# if loglevel == 'debug'
+if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts 'variables is:'
   puts "realm is #{realm}"
   puts "endpoint is #{endpoint}"
@@ -43,7 +43,7 @@ command = command.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(command)
   ENV.each do |k, v|
     puts "#{k} => #{v}"
   end
-#end
+end
 
 def stderr_text(stderr)
   doc = REXML::Document.new(stderr)
