@@ -25,12 +25,12 @@ command = command.gsub(/"' /, '"')
 # auto copying renames file from .sh into .ps1
 # so in that case we should call file with ps1 extension
 exit 0 if command.include? 'chmod +x /tmp/'
-command = command.gsub(/rm -f \/tmp\//, 'rm -force /tmp/') if command.include? 'rm -f /tmp/'
-command = command.gsub(/\.sh/, '.ps1') if /\/tmp\/.*\.sh/.match(command)
+command = command.gsub(%r{rm -f /tmp/}, 'rm -force /tmp/') if command.include? 'rm -f /tmp/'
+command = command.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(command)
 
 # TODO: ENV['WINRM_LOG'] = '' or 'debug, info, warn, or error'
 
-#if loglevel == 'debug'
+# if loglevel == 'debug'
   puts 'variables is:'
   puts "realm is #{realm}"
   puts "endpoint is #{endpoint}"
@@ -39,13 +39,13 @@ command = command.gsub(/\.sh/, '.ps1') if /\/tmp\/.*\.sh/.match(command)
   puts "command is #{ENV['RD_EXEC_COMMAND']}"
   puts "newcommand is #{command}"
 
-  puts "ENV"
-  ENV.each do |k,v|
+  puts 'ENV'
+  ENV.each do |k, v|
     puts "#{k} => #{v}"
   end
 #end
 
-def stderr_text (stderr)
+def stderr_text(stderr)
   doc = REXML::Document.new(stderr)
   text = doc.root.get_elements('//S').map(&:text).join
   text.gsub(/_x(\h\h\h\h)_/) do
@@ -55,38 +55,37 @@ def stderr_text (stderr)
 end
 
 case auth
-  when 'kerberos'
-    winrm = WinRM::WinRMWebService.new(endpoint, :kerberos, :realm => realm)
-  when 'plaintext'
-    winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, :disable_sspi => true)
-  when 'ssl'
-    winrm = WinRM::WinRMWebService.new(endpoint, :ssl, :user => user, :pass => pass, :disable_sspi => true)
-  else
-    raise "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
+when 'kerberos'
+  winrm = WinRM::WinRMWebService.new(endpoint, :kerberos, realm: realm)
+when 'plaintext'
+  winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, disable_sspi: true)
+when 'ssl'
+  winrm = WinRM::WinRMWebService.new(endpoint, :ssl, user: user, pass: pass, disable_sspi: true)
+else
+  fail "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
 end
 
 winrm.set_timeout(winrmtimeout.to_i) if winrmtimeout != ''
 
 case shell
-  when 'powershell'
-    result = winrm.powershell(command)
-  when 'cmd'
-    result = winrm.cmd(command)
-  when 'wql'
-    result = winrm.wql(command)
+when 'powershell'
+  result = winrm.powershell(command)
+when 'cmd'
+  result = winrm.cmd(command)
+when 'wql'
+  result = winrm.wql(command)
 end
 result[:data].each do |output_line|
-    output = "#{output}#{output_line[:stderr]}" if output_line.has_key?(:stderr)
-      STDOUT.print output_line[:stdout] if output_line.has_key?(:stdout)
+  output = "#{output}#{output_line[:stderr]}" if output_line.key?(:stderr)
+  STDOUT.print output_line[:stdout] if output_line.key?(:stdout)
 end
 STDERR.print stderr_text(output) if output != ''
 exit result[:exitcode] if result[:exitcode] != 0
 
-
-#winrm.powershell(command) do |stdout, stderr|
-#  STDOUT.print stdout
-#  STDERR.print stderr
-#end
+# winrm.powershell(command) do |stdout, stderr|
+#   STDOUT.print stdout
+#   STDERR.print stderr
+# end
 
 # result = winrm.cmd(command)
 # if result[:exitcode] != 0
