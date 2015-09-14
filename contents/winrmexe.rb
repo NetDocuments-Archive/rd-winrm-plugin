@@ -4,11 +4,12 @@ auth = ENV['RD_CONFIG_AUTHTYPE']
 user = ENV['RD_CONFIG_USER']
 pass = ENV['RD_CONFIG_PASS'].dup # for some reason this string is frozen, so we duplicate it
 host = ENV['RD_NODE_HOSTNAME']
+port = ENV['RD_CONFIG_WINRMPORT']
 shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 command = ENV['RD_EXEC_COMMAND']
 winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
-endpoint = "http://#{host}:5985/wsman"
+endpoint = "http://#{host}:#{port}/wsman"
 output = ''
 
 # Wrapper ro avoid strange and undocumented behavior of rundeck
