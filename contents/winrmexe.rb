@@ -36,13 +36,16 @@ if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts "realm is #{realm}"
   puts "endpoint is #{endpoint}"
   puts "user is #{user}"
-  puts "pass is #{pass}"
+  puts "pass is ********"
+  #  puts "pass is #{pass}"
   puts "command is #{ENV['RD_EXEC_COMMAND']}"
   puts "newcommand is #{command}"
 
   puts 'ENV'
   ENV.each do |k, v|
-    puts "#{k} => #{v}"
+    puts "#{k} => #{v}" if v != pass
+    puts "#{k} => ********" if v == pass
+#    puts "#{k} => #{v}" if v == pass
   end
 end
 
