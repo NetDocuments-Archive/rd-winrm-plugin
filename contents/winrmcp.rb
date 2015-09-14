@@ -4,12 +4,14 @@ auth = ENV['RD_CONFIG_AUTHTYPE']
 user = ENV['RD_CONFIG_USER']
 pass = ENV['RD_CONFIG_PASS'].dup
 host = ENV['RD_NODE_HOSTNAME']
+port = ENV['RD_CONFIG_WINRMPORT']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
 
 file = ARGV[1]
 dest = ARGV[2]
-endpoint = "http://#{host}:5985/wsman"
+endpoint = "http://#{host}:#{port}/wsman"
+
 
 dest = dest.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(dest)
 

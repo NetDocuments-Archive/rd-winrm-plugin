@@ -34,6 +34,7 @@ Settings:
 `Username` Put here username for basic or ssl auth  
 `Password` Put here username for basic or ssl auth  
 `Auth type` choose here kerberos, plaintext or ssl  
+`WinRM port` set port for winrm (Default: 5985/5986 for http/https)  
 `Shell` choose here powershell, cmd or wql  
 `WinRM timeout` put here time in seconds (useful for long running commands)  
 
