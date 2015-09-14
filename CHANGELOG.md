@@ -8,4 +8,6 @@
 `0.7.0` different shells support (powershell, cmd, wql)  
 `0.8.0` WinRM timeout managed via config  
 `0.9.0` Fixes in quotes cleanup behavior, Fixes in quotes cleanup behavior, trivial rubocop fixes  
-`1.0.0` Public release, debugging depends on debugging level on job
+`1.0.0` Public release, debugging depends on debugging level on job  
+`1.1.0` Added possibility to set port for winrm  
+
