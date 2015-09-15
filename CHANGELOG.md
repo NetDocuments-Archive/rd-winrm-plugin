@@ -10,4 +10,6 @@
 `0.9.0` Fixes in quotes cleanup behavior, Fixes in quotes cleanup behavior, trivial rubocop fixes  
 `1.0.0` Public release, debugging depends on debugging level on job  
 `1.1.0` Added possibility to set port for winrm  
+`1.1.1` Sanitised passwords in debug mode  
+`1.2.0` Allow override feature and fix for [rundeck bug](https://github.com/rundeck/rundeck/issues/1421)  
 

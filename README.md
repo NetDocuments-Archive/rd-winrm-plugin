@@ -38,3 +38,10 @@ Settings:
 `Shell` choose here powershell, cmd or wql  
 `WinRM timeout` put here time in seconds (useful for long running commands)  
 
+### Special Behavior
+`Allow Override` parameter gives possibility to set hostname, username and password in job options, not in project. It can be used in case you need to quickly change hostnames (with dropdown list for example) or set username/pass on job level  
+
+- If that parameter set to `hostname` you may use option variable with name `winrmhost` to set hostname
+- If that parameter set to `user` you may use `winrmuser` and `winrmpass` to set username/pass
+- If that parameter set to `all` you may use all these additional options
+- If that parameter set to `none` these options in jobs will be ignored

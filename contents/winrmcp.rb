@@ -7,11 +7,21 @@ host = ENV['RD_NODE_HOSTNAME']
 port = ENV['RD_CONFIG_WINRMPORT']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
+override = ENV['RD_CONFIG_ALLOWOVERRIDE']
+host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] and (override == 'host' or override == 'all')
+user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] and (override == 'user' or override == 'all')
+pass = ENV['RD_OPTION_WINRMPASS'] if ENV['RD_OPTION_WINRMPASS'] and (override == 'user' or override == 'all')
 
 file = ARGV[1]
 dest = ARGV[2]
 endpoint = "http://#{host}:#{port}/wsman"
 
+# Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
+# # https://github.com/rundeck/rundeck/issues/1421
+# remove it after issue will be fixed
+if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") and not File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb")
+    File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") # https://github.com/rundeck/rundeck/issues/1421
+end
 
 dest = dest.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(dest)
 

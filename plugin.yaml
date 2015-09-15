@@ -1,8 +1,8 @@
 name: rd-winrm-plugin
-version: 1.1.0
+version: 1.2.0
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
-date: 14.09.2015
+date: 15.09.2015
 providers:
   - name: WinRMexe
     title: WinRM Executor
@@ -24,7 +24,7 @@ providers:
           instance-scope-node-attribute: "krb5_realm"
       - name: user
         title: Username
-        description: "Username in DOMAIN/name form"
+        description: "Username in DOMAIN\\name form"
         type: String
         required: false
         scope: Instance
@@ -48,6 +48,16 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "authtype"
+      - name: allowoverride
+        title: Allow Override
+        description: "Gives possibility to override hostname, username (and password) in job options"
+        type: Select
+        values: "none, host, user, all"
+        default: "none"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "allowoverride"
       - name: winrmport
         title: WinRM port
         description: "WinRM port (Default: 5985/5986 for http/https)"
@@ -96,7 +106,7 @@ providers:
         title: Username
         type: String
         required: false
-        description: "Username in DOMAIN/name form"
+        description: "Username in DOMAIN\\name form"
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "user"
@@ -118,6 +128,16 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "authtype"
+      - name: allowoverride
+        title: Allow Override
+        description: "Gives possibility to override hostname, username (and password) in job options"
+        type: Select
+        values: "none, host, user, all"
+        default: "none"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "allowoverride"
       - name: winrmport
         title: WinRM port
         description: "WinRM port (Default: 5985/5986 for http/https)"
