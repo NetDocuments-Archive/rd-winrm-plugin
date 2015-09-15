@@ -9,6 +9,11 @@ shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 command = ENV['RD_EXEC_COMMAND']
 winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
+override = ENV['RD_CONFIG_ALLOWOVERRIDE']
+host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] and (override == 'host' or override == 'all')
+user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] and (override == 'user' or override == 'all')
+pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] and (override == 'user' or override == 'all')
+
 endpoint = "http://#{host}:#{port}/wsman"
 output = ''
 
@@ -25,11 +30,11 @@ command = command.gsub(/"' /, '"')
 # replace rm -f into rm -force
 # auto copying renames file from .sh into .ps1
 # so in that case we should call file with ps1 extension
+# TODO: add extension based on shell variable
+# TODO: deleting based on shell variable
 exit 0 if command.include? 'chmod +x /tmp/'
 command = command.gsub(%r{rm -f /tmp/}, 'rm -force /tmp/') if command.include? 'rm -f /tmp/'
 command = command.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(command)
-
-# TODO: ENV['WINRM_LOG'] = '' or 'debug, info, warn, or error'
 
 if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts 'variables is:'
@@ -37,15 +42,15 @@ if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts "endpoint is #{endpoint}"
   puts "user is #{user}"
   puts "pass is ********"
-  #  puts "pass is #{pass}"
+  #  puts "pass is #{pass}" # uncomment it for full auth debugging
   puts "command is #{ENV['RD_EXEC_COMMAND']}"
   puts "newcommand is #{command}"
 
   puts 'ENV'
   ENV.each do |k, v|
     puts "#{k} => #{v}" if v != pass
-    puts "#{k} => ********" if v == pass
-#    puts "#{k} => #{v}" if v == pass
+    puts "#{k} => ********" if v == pass or k == 'RD_CONFIG_PASS'
+#    puts "#{k} => #{v}" if v == pass # uncomment it for full auth debugging
   end
 end
 
