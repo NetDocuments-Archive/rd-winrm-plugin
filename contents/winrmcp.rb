@@ -16,6 +16,12 @@ file = ARGV[1]
 dest = ARGV[2]
 endpoint = "http://#{host}:#{port}/wsman"
 
+# Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
+# # https://github.com/rundeck/rundeck/issues/1421
+# remove it after issue will be fixed
+if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") and not File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb")
+    File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") # https://github.com/rundeck/rundeck/issues/1421
+end
 
 dest = dest.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(dest)
 

@@ -1,8 +1,8 @@
 name: rd-winrm-plugin
-version: 1.1.0
+version: 1.2.0
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
-date: 14.09.2015
+date: 15.09.2015
 providers:
   - name: WinRMexe
     title: WinRM Executor

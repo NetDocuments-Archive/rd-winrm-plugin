@@ -17,9 +17,16 @@ pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] and (overrid
 endpoint = "http://#{host}:#{port}/wsman"
 output = ''
 
+# Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
+# # https://github.com/rundeck/rundeck/issues/1421
+# remove it after issue will be fixed
+if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb") and not File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
+    File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
+end
+
 # Wrapper ro avoid strange and undocumented behavior of rundeck
 # Should be deleted after rundeck fix
-#  ''"'"'
+# https://github.com/rundeck/rundeck/issues/602
 command = command.gsub(/'"'"'' /, '\'')
 command = command.gsub(/ ''"'"'/, '\'')
 command = command.gsub(/ '"/, '"')
