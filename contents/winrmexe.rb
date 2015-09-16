@@ -15,7 +15,8 @@ user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] and (override ==
 pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] and (override == 'user' or override == 'all')
 
 endpoint = "http://#{host}:#{port}/wsman"
-output = ''
+ooutput = ''
+eoutput = ''
 
 # Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
 # # https://github.com/rundeck/rundeck/issues/1421
@@ -44,16 +45,17 @@ command = command.gsub(%r{rm -f /tmp/}, 'rm -force /tmp/') if command.include? '
 command = command.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(command)
 
 if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
-  puts 'variables is:'
-  puts "realm is #{realm}"
-  puts "endpoint is #{endpoint}"
-  puts "user is #{user}"
-  puts "pass is ********"
-  #  puts "pass is #{pass}" # uncomment it for full auth debugging
-  puts "command is #{ENV['RD_EXEC_COMMAND']}"
-  puts "newcommand is #{command}"
+  puts 'variables:'
+  puts "realm => #{realm}"
+  puts "endpoint => #{endpoint}"
+  puts "user => #{user}"
+  puts "pass => ********"
+  #  puts "pass => #{pass}" # uncomment it for full auth debugging
+  puts "command => #{ENV['RD_EXEC_COMMAND']}"
+  puts "newcommand => #{command}"
+  puts ''
 
-  puts 'ENV'
+  puts 'ENV:'
   ENV.each do |k, v|
     puts "#{k} => #{v}" if v != pass
     puts "#{k} => ********" if v == pass or k == 'RD_CONFIG_PASS'
@@ -91,11 +93,14 @@ when 'cmd'
 when 'wql'
   result = winrm.wql(command)
 end
+
 result[:data].each do |output_line|
-  output = "#{output}#{output_line[:stderr]}" if output_line.key?(:stderr)
-  STDOUT.print output_line[:stdout] if output_line.key?(:stdout)
+  eoutput = "#{eoutput}#{output_line[:stderr]}" if output_line.key?(:stderr)
+  ooutput = "#{ooutput}#{output_line[:stdout]}" if output_line.key?(:stdout)
 end
-STDERR.print stderr_text(output) if output != ''
+
+STDERR.print stderr_text(eoutput) if eoutput != ''
+STDOUT.print ooutput
 exit result[:exitcode] if result[:exitcode] != 0
 
 # winrm.powershell(command) do |stdout, stderr|
