@@ -45,3 +45,26 @@ Settings:
 - If that parameter set to `user` you may use `winrmuser` and `winrmpass` to set username/pass
 - If that parameter set to `all` you may use all these additional options
 - If that parameter set to `none` these options in jobs will be ignored
+
+### Limitations
+- Scripts in c:/tmp with .sh extension will be renamed into .ps1, .bat or .wql
+- Quotes behaviour can be strange (we trying to fix rundeck core strange behaviour, so our own also not perfect)
+- WQL execution never been tested :)
+
+### PR and reporting
+PR is highly welcome, we using gitflow for our development process, so please, make them to develop branch.
+If you have some issue please describe steps to reproduce it
+
+### License and Authors
+Copyright 2015 NetDocuments
+
+Author: [Volodymyr Babchynskyy](https://github.com/vvchik)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License
+is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions and limitations under the License.

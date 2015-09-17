@@ -147,6 +147,16 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "winrmport"
+      - name: shell
+        title: Shell
+        description: "Windows interpreter. Should be same as in Executor"
+        type: Select
+        values: "cmd, powershell, wql"
+        default: 'powershell'
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "shell"
       - name: winrmtimeout
         title: WinRM timeout
         description: "timeout in seconds default: 60"
