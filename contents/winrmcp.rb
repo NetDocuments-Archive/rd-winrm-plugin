@@ -23,7 +23,20 @@ if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") and not File.executable?(
     File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") # https://github.com/rundeck/rundeck/issues/1421
 end
 
-dest = dest.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(dest)
+# Wrapper for avoid unix style file copying then scripts run
+# - not accept chmod call
+# - replace rm -f into rm -force
+# - auto copying renames file from .sh into .ps1, .bat or .wql in tmp directory
+if %r{/tmp/.*\.sh}.match(dest)
+case shell
+  when 'powershell'
+    dest = dest.gsub(/\.sh/, '.ps1')
+  when 'cmd'
+    dest = dest.gsub(/\.sh/, '.bat')
+  when 'wql'
+    dest = dest.gsub(/\.sh/, '.wql')
+  end
+end
 
 case auth
 when 'kerberos'

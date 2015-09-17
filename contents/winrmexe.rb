@@ -33,16 +33,27 @@ command = command.gsub(/ ''"'"'/, '\'')
 command = command.gsub(/ '"/, '"')
 command = command.gsub(/"' /, '"')
 
-# Wrapper for avoid unix style file copying in command run
-# not accept chmod call
-# replace rm -f into rm -force
-# auto copying renames file from .sh into .ps1
-# so in that case we should call file with ps1 extension
-# TODO: add extension based on shell variable
-# TODO: deleting based on shell variable
+# Wrapper for avoid unix style file copying then scripts run
+# - not accept chmod call
+# - replace rm -f into rm -force
+# - auto copying renames file from .sh into .ps1, .bat or .wql in tmp directory
 exit 0 if command.include? 'chmod +x /tmp/'
-command = command.gsub(%r{rm -f /tmp/}, 'rm -force /tmp/') if command.include? 'rm -f /tmp/'
-command = command.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(command)
+
+if command.include? 'rm -f /tmp/'
+  shell = 'powershell'
+  command = command.gsub(%r{rm -f /tmp/}, 'rm -force /tmp/')
+end
+
+if %r{/tmp/.*\.sh}.match(command)
+case shell
+  when 'powershell'
+    command = command.gsub(/\.sh/, '.ps1')
+  when 'cmd'
+    command = command.gsub(/\.sh/, '.bat')
+  when 'wql'
+    command = command.gsub(/\.sh/, '.wql')
+  end
+end
 
 if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts 'variables:'
