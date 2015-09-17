@@ -10,9 +10,9 @@ realm = ENV['RD_CONFIG_KRB5_REALM']
 command = ENV['RD_EXEC_COMMAND']
 winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
 override = ENV['RD_CONFIG_ALLOWOVERRIDE']
-host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] and (override == 'host' or override == 'all')
-user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] and (override == 'user' or override == 'all')
-pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] and (override == 'user' or override == 'all')
+host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] && (override == 'host' || override == 'all')
+user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
+pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'user' || override == 'all')
 
 endpoint = "http://#{host}:#{port}/wsman"
 ooutput = ''
@@ -21,8 +21,8 @@ eoutput = ''
 # Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
 # # https://github.com/rundeck/rundeck/issues/1421
 # remove it after issue will be fixed
-if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb") and not File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
-    File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
+if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb") && !File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
+  File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
 end
 
 # Wrapper ro avoid strange and undocumented behavior of rundeck
@@ -45,7 +45,7 @@ if command.include? 'rm -f /tmp/'
 end
 
 if %r{/tmp/.*\.sh}.match(command)
-case shell
+  case shell
   when 'powershell'
     command = command.gsub(/\.sh/, '.ps1')
   when 'cmd'
@@ -60,8 +60,8 @@ if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts "realm => #{realm}"
   puts "endpoint => #{endpoint}"
   puts "user => #{user}"
-  puts "pass => ********"
-  #  puts "pass => #{pass}" # uncomment it for full auth debugging
+  puts 'pass => ********'
+  # puts "pass => #{pass}" # uncomment it for full auth debugging
   puts "command => #{ENV['RD_EXEC_COMMAND']}"
   puts "newcommand => #{command}"
   puts ''
@@ -69,8 +69,8 @@ if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts 'ENV:'
   ENV.each do |k, v|
     puts "#{k} => #{v}" if v != pass
-    puts "#{k} => ********" if v == pass or k == 'RD_CONFIG_PASS'
-#    puts "#{k} => #{v}" if v == pass # uncomment it for full auth debugging
+    puts "#{k} => ********" if v == pass || k == 'RD_CONFIG_PASS'
+    # puts "#{k} => #{v}" if v == pass # uncomment it for full auth debugging
   end
 end
 

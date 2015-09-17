@@ -9,7 +9,7 @@ providers:
     description: Executing Scripts or commands on remote windows computer
     service: NodeExecutor
     plugin-type: script
-#    script-interpreter: []
+    script-interpreter: ruby
     script-file: winrmexe.rb
 #    script-args: ${config.realm} ${config.username} ${config.password} ${node.hostname} ${exec.command}
     interpreter-args-quoted: true
@@ -76,7 +76,7 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "interpreter"
+          instance-scope-node-attribute: "shell"
       - name: winrmtimeout
         title: WinRM timeout
         description: "timeout in seconds default: 60"
@@ -85,12 +85,11 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "winrmtimeout"
-
   - name: WinRMcp
     title: WinRM File Copier
     service: FileCopier
     plugin-type: script
-#    script-interpreter: [interpreter]
+    script-interpreter: ruby
     script-file: winrmcp.rb
     script-args: ${node.hostname} ${file-copy.file} ${file-copy.destination}
     config:

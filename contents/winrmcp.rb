@@ -9,9 +9,9 @@ shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
 override = ENV['RD_CONFIG_ALLOWOVERRIDE']
-host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] and (override == 'host' or override == 'all')
-user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] and (override == 'user' or override == 'all')
-pass = ENV['RD_OPTION_WINRMPASS'] if ENV['RD_OPTION_WINRMPASS'] and (override == 'user' or override == 'all')
+host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] && (override == 'host' || override == 'all')
+user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
+pass = ENV['RD_OPTION_WINRMPASS'] if ENV['RD_OPTION_WINRMPASS'] && (override == 'user' || override == 'all')
 
 file = ARGV[1]
 dest = ARGV[2]
@@ -20,8 +20,8 @@ endpoint = "http://#{host}:#{port}/wsman"
 # Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
 # # https://github.com/rundeck/rundeck/issues/1421
 # remove it after issue will be fixed
-if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") and not File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb")
-    File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") # https://github.com/rundeck/rundeck/issues/1421
+if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") && !File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb")
+  File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") # https://github.com/rundeck/rundeck/issues/1421
 end
 
 # Wrapper for avoid unix style file copying then scripts run
@@ -29,7 +29,7 @@ end
 # - replace rm -f into rm -force
 # - auto copying renames file from .sh into .ps1, .bat or .wql in tmp directory
 if %r{/tmp/.*\.sh}.match(dest)
-case shell
+  case shell
   when 'powershell'
     dest = dest.gsub(/\.sh/, '.ps1')
   when 'cmd'
