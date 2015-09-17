@@ -10,18 +10,19 @@ realm = ENV['RD_CONFIG_KRB5_REALM']
 command = ENV['RD_EXEC_COMMAND']
 winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
 override = ENV['RD_CONFIG_ALLOWOVERRIDE']
-host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] and (override == 'host' or override == 'all')
-user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] and (override == 'user' or override == 'all')
-pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] and (override == 'user' or override == 'all')
+host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] && (override == 'host' || override == 'all')
+user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
+pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'user' || override == 'all')
 
 endpoint = "http://#{host}:#{port}/wsman"
-output = ''
+ooutput = ''
+eoutput = ''
 
 # Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
 # # https://github.com/rundeck/rundeck/issues/1421
 # remove it after issue will be fixed
-if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb") and not File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
-    File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
+if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb") && !File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
+  File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
 end
 
 # Wrapper ro avoid strange and undocumented behavior of rundeck
@@ -32,32 +33,44 @@ command = command.gsub(/ ''"'"'/, '\'')
 command = command.gsub(/ '"/, '"')
 command = command.gsub(/"' /, '"')
 
-# Wrapper for avoid unix style file copying in command run
-# not accept chmod call
-# replace rm -f into rm -force
-# auto copying renames file from .sh into .ps1
-# so in that case we should call file with ps1 extension
-# TODO: add extension based on shell variable
-# TODO: deleting based on shell variable
+# Wrapper for avoid unix style file copying then scripts run
+# - not accept chmod call
+# - replace rm -f into rm -force
+# - auto copying renames file from .sh into .ps1, .bat or .wql in tmp directory
 exit 0 if command.include? 'chmod +x /tmp/'
-command = command.gsub(%r{rm -f /tmp/}, 'rm -force /tmp/') if command.include? 'rm -f /tmp/'
-command = command.gsub(/\.sh/, '.ps1') if %r{/tmp/.*\.sh}.match(command)
+
+if command.include? 'rm -f /tmp/'
+  shell = 'powershell'
+  command = command.gsub(%r{rm -f /tmp/}, 'rm -force /tmp/')
+end
+
+if %r{/tmp/.*\.sh}.match(command)
+  case shell
+  when 'powershell'
+    command = command.gsub(/\.sh/, '.ps1')
+  when 'cmd'
+    command = command.gsub(/\.sh/, '.bat')
+  when 'wql'
+    command = command.gsub(/\.sh/, '.wql')
+  end
+end
 
 if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
-  puts 'variables is:'
-  puts "realm is #{realm}"
-  puts "endpoint is #{endpoint}"
-  puts "user is #{user}"
-  puts "pass is ********"
-  #  puts "pass is #{pass}" # uncomment it for full auth debugging
-  puts "command is #{ENV['RD_EXEC_COMMAND']}"
-  puts "newcommand is #{command}"
+  puts 'variables:'
+  puts "realm => #{realm}"
+  puts "endpoint => #{endpoint}"
+  puts "user => #{user}"
+  puts 'pass => ********'
+  # puts "pass => #{pass}" # uncomment it for full auth debugging
+  puts "command => #{ENV['RD_EXEC_COMMAND']}"
+  puts "newcommand => #{command}"
+  puts ''
 
-  puts 'ENV'
+  puts 'ENV:'
   ENV.each do |k, v|
     puts "#{k} => #{v}" if v != pass
-    puts "#{k} => ********" if v == pass or k == 'RD_CONFIG_PASS'
-#    puts "#{k} => #{v}" if v == pass # uncomment it for full auth debugging
+    puts "#{k} => ********" if v == pass || k == 'RD_CONFIG_PASS'
+    # puts "#{k} => #{v}" if v == pass # uncomment it for full auth debugging
   end
 end
 
@@ -91,11 +104,14 @@ when 'cmd'
 when 'wql'
   result = winrm.wql(command)
 end
+
 result[:data].each do |output_line|
-  output = "#{output}#{output_line[:stderr]}" if output_line.key?(:stderr)
-  STDOUT.print output_line[:stdout] if output_line.key?(:stdout)
+  eoutput = "#{eoutput}#{output_line[:stderr]}" if output_line.key?(:stderr)
+  ooutput = "#{ooutput}#{output_line[:stdout]}" if output_line.key?(:stdout)
 end
-STDERR.print stderr_text(output) if output != ''
+
+STDERR.print stderr_text(eoutput) if eoutput != ''
+STDOUT.print ooutput
 exit result[:exitcode] if result[:exitcode] != 0
 
 # winrm.powershell(command) do |stdout, stderr|

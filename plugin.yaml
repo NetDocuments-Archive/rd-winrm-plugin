@@ -1,15 +1,15 @@
 name: rd-winrm-plugin
-version: 1.2.0
+version: 1.3.0
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
-date: 15.09.2015
+date: 17.09.2015
 providers:
   - name: WinRMexe
     title: WinRM Executor
     description: Executing Scripts or commands on remote windows computer
     service: NodeExecutor
     plugin-type: script
-#    script-interpreter: []
+    script-interpreter: ruby
     script-file: winrmexe.rb
 #    script-args: ${config.realm} ${config.username} ${config.password} ${node.hostname} ${exec.command}
     interpreter-args-quoted: true
@@ -76,7 +76,7 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "interpreter"
+          instance-scope-node-attribute: "shell"
       - name: winrmtimeout
         title: WinRM timeout
         description: "timeout in seconds default: 60"
@@ -85,12 +85,11 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "winrmtimeout"
-
   - name: WinRMcp
     title: WinRM File Copier
     service: FileCopier
     plugin-type: script
-#    script-interpreter: [interpreter]
+    script-interpreter: ruby
     script-file: winrmcp.rb
     script-args: ${node.hostname} ${file-copy.file} ${file-copy.destination}
     config:
@@ -147,6 +146,16 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "winrmport"
+      - name: shell
+        title: Shell
+        description: "Windows interpreter. Should be same as in Executor"
+        type: Select
+        values: "cmd, powershell, wql"
+        default: 'powershell'
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "shell"
       - name: winrmtimeout
         title: WinRM timeout
         description: "timeout in seconds default: 60"
