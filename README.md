@@ -20,7 +20,7 @@ Install following gems:
 `gem install winrm`  
 `gem install winrm-fs`  
 
-Download from the [releases page](https://github.com/vvchik/rd-winrm-plugin/releases).
+Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
 Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck.
 
