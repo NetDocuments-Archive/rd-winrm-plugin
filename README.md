@@ -24,7 +24,7 @@ Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugi
 
 Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck.
 
-Run `winrm quickconfig` as admin [Configuration the Remote Windows](https://technet.microsoft.com/en-us/magazine/ff700227.aspx) on Nodes
+Run `winrm quickconfig` as admin on remote Nodes [for configure them](https://technet.microsoft.com/en-us/magazine/ff700227.aspx)
 
 ### Configuration
 choose `WinRM Executor` as Default Node Executor  
@@ -50,6 +50,17 @@ Settings:
 - Scripts in c:/tmp with .sh extension will be renamed into .ps1, .bat or .wql
 - Quotes behaviour can be strange (we trying to fix rundeck core strange behaviour, so our own also not perfect)
 - WQL execution never been tested :)
+
+### Troubleshooting
+You may have some errors like ```WinRM::WinRMAuthorizationError```.  
+You can run the following commands on the server to try to solve the problem:
+
+```
+winrm set winrm/config/client/auth @{Basic="true"}
+winrm set winrm/config/service/auth @{Basic="true"}
+winrm set winrm/config/service @{AllowUnencrypted="true"}
+```
+You can read more about that on issue [#29](https://github.com/WinRb/WinRM/issues/29) on ruby WinRM page
 
 ### PR and reporting
 PR is highly welcome, we using gitflow for our development process, so please, make them to develop branch.  
