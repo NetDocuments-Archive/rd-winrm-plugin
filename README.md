@@ -53,10 +53,10 @@ Settings:
 
 ### PR and reporting
 PR is highly welcome, we using gitflow for our development process, so please, make them to develop branch.  
-If you have some issue please describe steps to reproduce it 
+If you have some issue please describe steps to reproduce it
 
 ### License and Authors
-Copyright 2015 NetDocuments
+Copyright 2015 NetVoyage Corporation (NetDocuments)
 
 Author: [Volodymyr Babchynskyy](https://github.com/vvchik)
 
