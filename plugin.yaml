@@ -1,0 +1,167 @@
+name: rd-winrm-plugin
+version: 1.3.0
+rundeckPluginVersion: 1.0
+author: Volodymyr Babchynskyy
+date: 17.09.2015
+providers:
+  - name: WinRMexe
+    title: WinRM Executor
+    description: Executing Scripts or commands on remote windows computer
+    service: NodeExecutor
+    plugin-type: script
+    script-interpreter: ruby
+    script-file: winrmexe.rb
+#    script-args: ${config.realm} ${config.username} ${config.password} ${node.hostname} ${exec.command}
+    interpreter-args-quoted: true
+    config:
+      - name: krb5_realm
+        title: Kerberos Realm
+        type: String
+        required: false
+        description: "Kerberos Realm FQDN in capital letters"
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "krb5_realm"
+      - name: user
+        title: Username
+        description: "Username in DOMAIN\\name form"
+        type: String
+        required: false
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "user"
+      - name: pass
+        title: Password
+        description: "Password"
+        type: String
+        required: false
+        scope: Instance
+        renderingOptions:
+          displayType: PASSWORD
+      - name: authtype
+        title: Auth type
+        description: "Autentification type"
+        type: Select
+        values: "kerberos, plaintext, ssl"
+        default: "plaintext"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "authtype"
+      - name: allowoverride
+        title: Allow Override
+        description: "Gives possibility to override hostname, username (and password) in job options"
+        type: Select
+        values: "none, host, user, all"
+        default: "none"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "allowoverride"
+      - name: winrmport
+        title: WinRM port
+        description: "WinRM port (Default: 5985/5986 for http/https)"
+        type: String
+        default: "5985"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "winrmport"
+      - name: shell
+        title: Shell
+        description: "Windows interpreter"
+        type: Select
+        values: "cmd, powershell, wql"
+        default: 'powershell'
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "shell"
+      - name: winrmtimeout
+        title: WinRM timeout
+        description: "timeout in seconds default: 60"
+        type: Integer
+        required: false
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "winrmtimeout"
+  - name: WinRMcp
+    title: WinRM File Copier
+    service: FileCopier
+    plugin-type: script
+    script-interpreter: ruby
+    script-file: winrmcp.rb
+    script-args: ${node.hostname} ${file-copy.file} ${file-copy.destination}
+    config:
+      - name: krb5_realm
+        title: Kerberos Realm
+        type: String
+        required: false
+        description: "Kerberos Realm FQDN in capital letters"
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "krb5_realm"
+      - name: user
+        title: Username
+        type: String
+        required: false
+        description: "Username in DOMAIN\\name form"
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "user"
+      - name: pass
+        title: Password
+        type: String
+        required: false
+        description: "Password"
+        scope: Instance
+        renderingOptions:
+          displayType: PASSWORD
+      - name: authtype
+        title: Auth type
+        description: "Autentification type"
+        type: Select
+        values: "kerberos, plaintext, ssl"
+        default: "plaintext"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "authtype"
+      - name: allowoverride
+        title: Allow Override
+        description: "Gives possibility to override hostname, username (and password) in job options"
+        type: Select
+        values: "none, host, user, all"
+        default: "none"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "allowoverride"
+      - name: winrmport
+        title: WinRM port
+        description: "WinRM port (Default: 5985/5986 for http/https)"
+        type: String
+        default: "5985"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "winrmport"
+      - name: shell
+        title: Shell
+        description: "Windows interpreter. Should be same as in Executor"
+        type: Select
+        values: "cmd, powershell, wql"
+        default: 'powershell'
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "shell"
+      - name: winrmtimeout
+        title: WinRM timeout
+        description: "timeout in seconds default: 60"
+        type: Integer
+        required: false
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "winrmtimeout"
+
