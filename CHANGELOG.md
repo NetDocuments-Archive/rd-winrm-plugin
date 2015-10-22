@@ -13,4 +13,5 @@
 `1.1.1` Sanitised passwords in debug mode  
 `1.2.0` Allow override feature and fix for [rundeck bug](https://github.com/rundeck/rundeck/issues/1421)  
 `1.3.0` Extension for copied script depends on context of script execution  
+`1.3.1` Fixes in readme, fix for #3 (WinRM timeout defaults) and #2 (can't modify frozen string)
 

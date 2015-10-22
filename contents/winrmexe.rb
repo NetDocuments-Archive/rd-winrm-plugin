@@ -1,17 +1,16 @@
 #!/usr/bin/ruby
 require 'winrm'
 auth = ENV['RD_CONFIG_AUTHTYPE']
-user = ENV['RD_CONFIG_USER']
-pass = ENV['RD_CONFIG_PASS'].dup # for some reason this string is frozen, so we duplicate it
+user = ENV['RD_CONFIG_USER'].dup # for some reason these strings is frozen, so we duplicate it
+pass = ENV['RD_CONFIG_PASS'].dup
 host = ENV['RD_NODE_HOSTNAME']
 port = ENV['RD_CONFIG_WINRMPORT']
 shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 command = ENV['RD_EXEC_COMMAND']
-winrmtimeout = ENV['RD_CONFIG_WINRMTIMEOUT']
 override = ENV['RD_CONFIG_ALLOWOVERRIDE']
 host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] && (override == 'host' || override == 'all')
-user = ENV['RD_OPTION_WINRMUSER'] if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
+user = ENV['RD_OPTION_WINRMUSER'].dup if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
 pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'user' || override == 'all')
 
 endpoint = "http://#{host}:#{port}/wsman"
@@ -94,7 +93,7 @@ else
   fail "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
 end
 
-winrm.set_timeout(winrmtimeout.to_i) if winrmtimeout != ''
+winrm.set_timeout(ENV['RD_CONFIG_WINRMTIMEOUT'].to_i) if ENV['RD_CONFIG_WINRMTIMEOUT']
 
 case shell
 when 'powershell'
