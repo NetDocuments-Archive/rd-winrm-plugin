@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 require 'winrm'
 auth = ENV['RD_CONFIG_AUTHTYPE']
-user = ENV['RD_CONFIG_USER']
-pass = ENV['RD_CONFIG_PASS'].dup # for some reason this string is frozen, so we duplicate it
+user = ENV['RD_CONFIG_USER'].dup # for some reason these strings is frozen, so we duplicate it
+pass = ENV['RD_CONFIG_PASS'].dup
 host = ENV['RD_NODE_HOSTNAME']
 port = ENV['RD_CONFIG_WINRMPORT']
 shell = ENV['RD_CONFIG_SHELL']
