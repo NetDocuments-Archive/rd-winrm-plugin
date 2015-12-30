@@ -73,18 +73,18 @@ if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   end
 end
 
-def stderr_text(stderr)
-  doc = REXML::Document.new(stderr)
-  begin
-    text = doc.root.get_elements('//S').map(&:text).join
-    text.gsub(/_x(\h\h\h\h)_/) do
-      code = Regexp.last_match[1]
-      code.hex.chr
-    end
-  rescue
-    return stderr
-  end
-end
+#def stderr_text(stderr)
+#  doc = REXML::Document.new(stderr)
+#  begin
+#    text = doc.root.get_elements('//S').map(&:text).join
+#    text.gsub(/_x(\h\h\h\h)_/) do
+#      code = Regexp.last_match[1]
+#      code.hex.chr
+#    end
+#  rescue
+#    return stderr
+#  end
+#end
 
 case auth
 when 'kerberos'
@@ -101,21 +101,29 @@ winrm.set_timeout(ENV['RD_CONFIG_WINRMTIMEOUT'].to_i) if ENV['RD_CONFIG_WINRMTIM
 
 case shell
 when 'powershell'
-  result = winrm.powershell(command)
+  winrm.powershell(command) do |stdout, stderr|
+    STDOUT.print stdout
+    STDERR.print stderr
+  end
 when 'cmd'
-  result = winrm.cmd(command)
+  winrm.cmd(command) do |stdout, stderr|
+    STDOUT.print stdout
+    STDERR.print stderr
+  end
 when 'wql'
-  result = winrm.wql(command)
+  winrm.wql(command) do |stdout, stderr|
+    STDOUT.print stdout
+    STDERR.print stderr
+  end
 end
 
-result[:data].each do |output_line|
-  eoutput = "#{eoutput}#{output_line[:stderr]}" if output_line.key?(:stderr)
-  ooutput = "#{ooutput}#{output_line[:stdout]}" if output_line.key?(:stdout)
-end
+#result[:data].each do |output_line|
+#  eoutput = "#{eoutput}#{output_line[:stderr]}" if output_line.key?(:stderr)
+#  STDOUT.print "#{ooutput}#{output_line[:stdout]}" if output_line.key?(:stdout)
+#end
 
-STDERR.print stderr_text(eoutput) if eoutput != ''
-STDOUT.print ooutput
-exit result[:exitcode] if result[:exitcode] != 0
+#STDERR.print stderr_text(eoutput) if eoutput != ''
+#exit result[:exitcode] if result[:exitcode] != 0
 
 # winrm.powershell(command) do |stdout, stderr|
 #   STDOUT.print stdout
