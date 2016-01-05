@@ -22,9 +22,17 @@ Install following gems:
 
 Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
-Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck.
+Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck. It must be named like `rd-winrm-plugin-x.x.x.zip`. There is no need to restart rundeck. 
 
-Run `winrm quickconfig` as admin on remote Nodes [for configure them](https://technet.microsoft.com/en-us/magazine/ff700227.aspx)
+```bash
+RD_WINRM='1.3.2'
+curl https://github.com/NetDocuments/rd-winrm-plugin/archive/$RD_WINRM.zip -o /var/lib/rundeck/libext/rd-winrm-plugin-$RD_WINRM.zip
+```
+
+Before rundeck can run commands on windows nodes, [configure winrm](https://technet.microsoft.com/en-us/magazine/ff700227.aspx) from an administrative powershell window
+
+    winrm quickconfig
+ 
 
 ### Configuration
 choose `WinRM Executor` as Default Node Executor  
@@ -37,6 +45,8 @@ Settings:
 `WinRM port` set port for winrm (Default: 5985/5986 for http/https)  
 `Shell` choose here powershell, cmd or wql  
 `WinRM timeout` put here time in seconds (useful for long running commands)  
+
+![](http://cl.ly/1S1D2C070Z1T/Screenshot%202016-01-05%2016.51.53.png)
 
 ### Special Behaviour
 `Allow Override` parameter gives possibility to set hostname, username and password in job options, not in project. It can be used in case you need to quickly change hostnames (with dropdown list for example) or set username/pass on job level  
