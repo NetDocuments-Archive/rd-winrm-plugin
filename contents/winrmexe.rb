@@ -67,7 +67,7 @@ if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
 
   puts 'ENV:'
   ENV.each do |k, v|
-    puts "#{k} => #{v}" if v != pass
+    puts "#{k} => #{v}" if v != pass && k != 'RD_CONFIG_PASS'
     puts "#{k} => ********" if v == pass || k == 'RD_CONFIG_PASS'
     # puts "#{k} => #{v}" if v == pass # uncomment it for full auth debugging
   end
