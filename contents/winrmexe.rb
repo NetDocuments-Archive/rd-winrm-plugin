@@ -101,9 +101,9 @@ winrm.set_timeout(ENV['RD_CONFIG_WINRMTIMEOUT'].to_i) if ENV['RD_CONFIG_WINRMTIM
 
 case shell
 when 'powershell'
-  result = winrm.powershell(command)
+  result = winrm.create_executor().run_powershell_script(command)
 when 'cmd'
-  result = winrm.cmd(command)
+  result = winrm.create_executor().run_cmd(command)
 when 'wql'
   result = winrm.wql(command)
 end
