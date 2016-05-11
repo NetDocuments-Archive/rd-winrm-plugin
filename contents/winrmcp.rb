@@ -14,7 +14,11 @@ pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override
 
 file = ARGV[1]
 dest = ARGV[2]
-endpoint = "http://#{host}:#{port}/wsman"
+if auth == 'ssl'
+  endpoint = "https://#{host}:#{port}/wsman"
+else
+  endpoint = "http://#{host}:#{port}/wsman"
+end
 
 # Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
 # # https://github.com/rundeck/rundeck/issues/1421

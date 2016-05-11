@@ -13,7 +13,11 @@ host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] && (override == 
 user = ENV['RD_OPTION_WINRMUSER'].dup if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
 pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'user' || override == 'all')
 
-endpoint = "http://#{host}:#{port}/wsman"
+if auth == 'ssl'
+  endpoint = "https://#{host}:#{port}/wsman"
+else
+  endpoint = "http://#{host}:#{port}/wsman"
+end
 ooutput = ''
 eoutput = ''
 
