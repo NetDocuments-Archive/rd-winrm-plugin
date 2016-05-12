@@ -1,5 +1,9 @@
 ## Changelog
 
+### [1.4.1](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.4.1)
+Fix HTTPS with self-signed cert [#23](https://github.com/netdocuments/rd-winrm-plugin/issues/23)  
+Added support https for ssl connections [#25](https://github.com/NetDocuments/rd-winrm-plugin/pull/25)  
+
 ### [1.4.0](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.4.0)
 Fix credential leakage [#22](https://github.com/netdocuments/rd-winrm-plugin/issues/22)  
 Change shell executions to use non deprecated methods [#24](https://github.com/netdocuments/rd-winrm-plugin/issues/24)  
