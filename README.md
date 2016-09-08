@@ -22,7 +22,7 @@ Install following gems:
 
 Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
-Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck. It must be named like `rd-winrm-plugin-x.x.x.zip`. There is no need to restart rundeck. 
+Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck. It must be named like `rd-winrm-plugin-x.x.x.zip`. There is no need to restart rundeck.
 
 ```bash
 RD_WINRM='1.4.1'
@@ -32,16 +32,16 @@ curl https://github.com/NetDocuments/rd-winrm-plugin/archive/$RD_WINRM.zip -o /v
 Before rundeck can run commands on windows nodes, [configure winrm](https://technet.microsoft.com/en-us/magazine/ff700227.aspx) from an administrative powershell window
 
     winrm quickconfig
- 
+
 
 ### Configuration
 choose `WinRM Executor` as Default Node Executor  
 and `WinRM File Copier` as Default Node File Copier   
 Settings:  
 `Kerberos Realm`  Put here fqdn of your realm in case your computer is part of AD domain  
-`Username` Put here username for basic or ssl auth  
-`Password` Put here username for basic or ssl auth  
-`Auth type` choose here kerberos, plaintext or ssl  
+`Username` Put here username for negotiate, plaintext or ssl auth
+`Password` Put here username for negotiate, plaintext or ssl auth 
+`Auth type` choose here negotiate, kerberos, plaintext or ssl  
 `WinRM port` set port for winrm (Default: 5985/5986 for http/https)  
 `Shell` choose here powershell, cmd or wql  
 `WinRM timeout` put here time in seconds (useful for long running commands)  
