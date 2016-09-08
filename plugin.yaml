@@ -42,7 +42,7 @@ providers:
         title: Auth type
         description: "Autentification type"
         type: Select
-        values: "kerberos, plaintext, ssl"
+        values: "negotiate, ssl, kerberos, plaintext"
         default: "plaintext"
         required: true
         scope: Instance
