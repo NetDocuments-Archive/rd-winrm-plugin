@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+gem 'winrm-fs', '= 0.4.3'
 require 'winrm-fs'
 auth = ENV['RD_CONFIG_AUTHTYPE']
 user = ENV['RD_CONFIG_USER'].dup # for some reason these strings is frozen, so we duplicate it
