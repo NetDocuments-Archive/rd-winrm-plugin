@@ -91,6 +91,8 @@ def stderr_text(stderr)
 end
 
 case auth
+when 'negotiate'
+  winrm = WinRM::WinRMWebService.new(endpoint, :negotiate, user: user, pass: pass)
 when 'kerberos'
   winrm = WinRM::WinRMWebService.new(endpoint, :kerberos, realm: realm)
 when 'plaintext'
