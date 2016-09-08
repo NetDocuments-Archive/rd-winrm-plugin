@@ -39,8 +39,8 @@ choose `WinRM Executor` as Default Node Executor
 and `WinRM File Copier` as Default Node File Copier   
 Settings:  
 `Kerberos Realm`  Put here fqdn of your realm in case your computer is part of AD domain  
-`Username` Put here username for negotiate, plaintext or ssl auth
-`Password` Put here username for negotiate, plaintext or ssl auth 
+`Username` Put here username for negotiate, plaintext or ssl auth  
+`Password` Put here username for negotiate, plaintext or ssl auth  
 `Auth type` choose here negotiate, kerberos, plaintext or ssl  
 `WinRM port` set port for winrm (Default: 5985/5986 for http/https)  
 `Shell` choose here powershell, cmd or wql  
