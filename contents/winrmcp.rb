@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+gem 'winrm-fs', '= 0.4.3'
 require 'winrm-fs'
 auth = ENV['RD_CONFIG_AUTHTYPE']
 user = ENV['RD_CONFIG_USER'].dup # for some reason these strings is frozen, so we duplicate it
@@ -43,6 +44,8 @@ if %r{/tmp/.*\.sh}.match(dest)
 end
 
 case auth
+when 'negotiate'
+  winrm = WinRM::WinRMWebService.new(endpoint, :negotiate, user: user, pass: pass)
 when 'kerberos'
   winrm = WinRM::WinRMWebService.new(endpoint, :kerberos, realm: realm)
 when 'plaintext'
