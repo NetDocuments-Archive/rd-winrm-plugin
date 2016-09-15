@@ -1,5 +1,8 @@
 ## Changelog
 
+### [1.5.1](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.5.1)
+Add NTLM/Negotiate authentication type for WinRM File Copier
+
 ### [1.5.0](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.5.0)
 Add NTLM/Negotiate authentication type [#19](https://github.com/NetDocuments/rd-winrm-plugin/issues/19)
 Add check for required winrm/winrm-fs gem versions [#29](https://github.com/NetDocuments/rd-winrm-plugin/issues/29)
