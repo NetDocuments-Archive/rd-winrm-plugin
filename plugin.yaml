@@ -40,7 +40,7 @@ providers:
           displayType: PASSWORD
       - name: authtype
         title: Auth type
-        description: "Autentification type"
+        description: "Authentication type"
         type: Select
         values: "negotiate, ssl, kerberos, plaintext"
         default: "plaintext"
@@ -119,9 +119,9 @@ providers:
           displayType: PASSWORD
       - name: authtype
         title: Auth type
-        description: "Autentification type"
+        description: "Authentication type"
         type: Select
-        values: "kerberos, plaintext, ssl"
+        values: "negotiate, ssl, kerberos, plaintext"
         default: "plaintext"
         required: true
         scope: Instance
