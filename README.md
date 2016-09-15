@@ -36,8 +36,9 @@ Before rundeck can run commands on windows nodes, [configure winrm](https://tech
 
 
 ### Configuration
-choose `WinRM Executor` as Default Node Executor  
+Choose `WinRM Executor` as Default Node Executor  
 and `WinRM File Copier` as Default Node File Copier   
+
 Settings:  
 `Kerberos Realm`  Put here fqdn of your realm in case your computer is part of AD domain  
 `Username` Put here username for negotiate, plaintext or ssl auth  
