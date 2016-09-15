@@ -14,18 +14,19 @@ Can copy files to windows
 ### Installation
 
 Install Ruby:  
-something like this: `apt-get install make ruby ruby-dev`  
+Ubuntu: `apt-get install make ruby ruby-dev`  
+CentOS/RHEL: `yum install make ruby ruby-devel`
 
 Install following gems:  
-`gem install winrm`  
-`gem install winrm-fs`  
+`gem install winrm -v 1.8.1`  
+`gem install winrm-fs -v 0.4.3`  
 
 Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
 Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck. It must be named like `rd-winrm-plugin-x.x.x.zip`. There is no need to restart rundeck.
 
 ```bash
-RD_WINRM='1.5.0'
+RD_WINRM='1.5.1'
 curl https://github.com/NetDocuments/rd-winrm-plugin/archive/$RD_WINRM.zip -o /var/lib/rundeck/libext/rd-winrm-plugin-$RD_WINRM.zip
 ```
 
@@ -35,8 +36,9 @@ Before rundeck can run commands on windows nodes, [configure winrm](https://tech
 
 
 ### Configuration
-choose `WinRM Executor` as Default Node Executor  
+Choose `WinRM Executor` as Default Node Executor  
 and `WinRM File Copier` as Default Node File Copier   
+
 Settings:  
 `Kerberos Realm`  Put here fqdn of your realm in case your computer is part of AD domain  
 `Username` Put here username for negotiate, plaintext or ssl auth  
