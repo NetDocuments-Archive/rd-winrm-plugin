@@ -18,8 +18,8 @@ Ubuntu: `apt-get install make ruby ruby-dev`
 CentOS/RHEL: `yum install make ruby ruby-devel`
 
 Install following gems:  
-`gem install winrm`  
-`gem install winrm-fs`  
+`gem install winrm -v 1.8.1`  
+`gem install winrm-fs -v 0.4.3`  
 
 Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
