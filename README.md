@@ -14,7 +14,8 @@ Can copy files to windows
 ### Installation
 
 Install Ruby:  
-something like this: `apt-get install make ruby ruby-dev`  
+Ubuntu: `apt-get install make ruby ruby-dev`  
+CentOS/RHEL: `yum install make ruby ruby-devel`
 
 Install following gems:  
 `gem install winrm`  
