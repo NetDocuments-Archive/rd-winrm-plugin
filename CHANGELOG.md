@@ -1,5 +1,8 @@
 ## Changelog
 
+### [1.6.0](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.6.0)
+Enables basic auth (GH-34)
+
 ### [1.5.1](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.5.1)
 Add NTLM/Negotiate authentication type for WinRM File Copier
 
