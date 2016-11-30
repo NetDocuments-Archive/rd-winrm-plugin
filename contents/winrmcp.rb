@@ -49,7 +49,7 @@ when 'negotiate'
 when 'kerberos'
   winrm = WinRM::WinRMWebService.new(endpoint, :kerberos, realm: realm)
 when 'plaintext'
-  winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, disable_sspi: true)
+  winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, disable_sspi: true, basic_auth_only: true)
 when 'ssl'
   winrm = WinRM::WinRMWebService.new(endpoint, :ssl, user: user, pass: pass, disable_sspi: true)
 else
