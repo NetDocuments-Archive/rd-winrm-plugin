@@ -18,8 +18,9 @@ Ubuntu: `apt-get install make ruby ruby-dev`
 CentOS/RHEL: `yum install make ruby ruby-devel`
 
 Install following gems:  
-`gem install winrm -v 1.8.1`  
-`gem install winrm-fs -v 0.4.3`  
+`gem install winrm -v 2.1.2`  
+`gem install winrm-fs -v 1.0.1`  
+`gem install rubyntlm`
 
 Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
@@ -44,6 +45,7 @@ Settings:
 `Username` Put here username for negotiate, plaintext or ssl auth  
 `Password` Put here password for negotiate, plaintext or ssl auth  
 `Auth type` choose here negotiate, kerberos, plaintext or ssl  
+`WinRM transport protocol` set protocol for winrm transport (Default: http)
 `WinRM port` set port for winrm (Default: 5985/5986 for http/https)  
 `Shell` choose here powershell, cmd or wql  
 `WinRM timeout` put here time in seconds (useful for long running commands)  
