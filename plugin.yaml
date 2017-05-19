@@ -58,6 +58,16 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "allowoverride"
+      - name: winrmtransport
+        title: WinRM transport protocol
+        description: "WinRM transport protocol (Default: http or https when ssl is selected for Authentication type)"
+        type: Select
+        default: "http"
+        values: "http, https"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "winrmtransport"
       - name: winrmport
         title: WinRM port
         description: "WinRM port (Default: 5985/5986 for http/https)"
@@ -137,6 +147,16 @@ providers:
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "allowoverride"
+      - name: winrmtransport
+        title: WinRM transport protocol
+        description: "WinRM transport protocol (Default: http or https when ssl is selected for Authentication type)"
+        type: Select
+        default: "http"
+        values: "http, https"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "winrmtransport"
       - name: winrmport
         title: WinRM port
         description: "WinRM port (Default: 5985/5986 for http/https)"
