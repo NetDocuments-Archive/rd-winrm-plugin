@@ -2,6 +2,7 @@
 gem 'winrm', '= 2.1.2'
 require 'winrm'
 auth = ENV['RD_CONFIG_AUTHTYPE']
+nossl = ENV['RD_CONFIG_NOSSL'] == 'true' ? true : false
 if ENV['RD_CONFIG_USER'] # allow empy (default) password (override used)
   user = ENV['RD_CONFIG_USER'].dup # for some reason this string is frozen, so we duplicate it
 else
@@ -36,7 +37,7 @@ if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb") && !File.executable?("#{EN
   File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
 end
 
-# Wrapper ro avoid strange and undocumented behavior of rundeck
+# Wrapper to avoid strange and undocumented behavior of rundeck
 # Should be deleted after rundeck fix
 # https://github.com/rundeck/rundeck/issues/602
 command = command.gsub(/'"'"'' /, '\'')
@@ -122,6 +123,7 @@ when 'ssl'
   connections_opts[:user] = user
   connections_opts[:password] = pass
   connections_opts[:disable_sspi] = true
+  connections_opts[:no_ssl_peer_verification] = nossl
 else
   fail "Invalid authtype '#{auth}' specified, expected: negotiate, kerberos, plaintext, ssl."
 end
