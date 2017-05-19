@@ -2,6 +2,7 @@
 gem 'winrm-fs', '= 1.0.1'
 require 'winrm-fs'
 auth = ENV['RD_CONFIG_AUTHTYPE']
+nossl = ENV['RD_CONFIG_NOSSL'] == 'true' ? true : false
 if ENV['RD_CONFIG_USER'] # allow empy (default) password (override used)
   user = ENV['RD_CONFIG_USER'].dup # for some reason this string is frozen, so we duplicate it
 else
@@ -76,6 +77,7 @@ when 'ssl'
   connections_opts[:user] = user
   connections_opts[:password] = pass
   connections_opts[:disable_sspi] = true
+  connections_opts[:no_ssl_peer_verification] = nossl
 else
   fail "Invalid authtype '#{auth}' specified, expected: negotiate, kerberos, plaintext, ssl."
 end
