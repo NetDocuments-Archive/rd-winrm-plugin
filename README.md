@@ -41,12 +41,13 @@ and `WinRM File Copier` as Default Node File Copier
 
 Settings:  
 `Kerberos Realm`  Put here fqdn of your realm in case your computer is part of AD domain  
-`Username` Put here username for negotiate, plaintext or ssl auth  
-`Password` Put here password for negotiate, plaintext or ssl auth  
+`Username` (Removed, it will taken at node label) Put here username for negotiate, plaintext or ssl auth  
+`Password` (Removed, it will taken at node label or using Password Storage)Put here password for negotiate, plaintext or ssl auth  
 `Auth type` choose here negotiate, kerberos, plaintext or ssl  
 `WinRM port` set port for winrm (Default: 5985/5986 for http/https)  
 `Shell` choose here powershell, cmd or wql  
 `WinRM timeout` put here time in seconds (useful for long running commands)  
+`Password Storage` Put the password using the Key Storage
 
 ![](http://cl.ly/1S1D2C070Z1T/Screenshot%202016-01-05%2016.51.53.png)
 

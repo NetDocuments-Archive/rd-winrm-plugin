@@ -1,17 +1,21 @@
 #!/usr/bin/ruby
 gem 'winrm-fs', '= 0.4.3'
 require 'winrm-fs'
+
 auth = ENV['RD_CONFIG_AUTHTYPE']
-user = ENV['RD_CONFIG_USER'].dup # for some reason these strings is frozen, so we duplicate it
-pass = ENV['RD_CONFIG_PASS'].dup
+user = ENV['RD_NODE_USERNAME'] #take the username from node
+pass = ENV['RD_CONFIG_PASSWORDSTORAGEPATH'].dup  #take the password from password storage path
 host = ENV['RD_NODE_HOSTNAME']
 port = ENV['RD_CONFIG_WINRMPORT']
 shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
+command = ENV['RD_EXEC_COMMAND']
 override = ENV['RD_CONFIG_ALLOWOVERRIDE']
 host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] && (override == 'host' || override == 'all')
 user = ENV['RD_OPTION_WINRMUSER'].dup if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
 pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'user' || override == 'all')
+no_ssl_peer_verification=ENV['RD_CONFIG_NOSSLPV']
+
 
 file = ARGV[1]
 dest = ARGV[2]
@@ -51,7 +55,7 @@ when 'kerberos'
 when 'plaintext'
   winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, disable_sspi: true)
 when 'ssl'
-  winrm = WinRM::WinRMWebService.new(endpoint, :ssl, user: user, pass: pass, disable_sspi: true)
+  winrm = WinRM::WinRMWebService.new(endpoint, :ssl, user: user, pass: pass, disable_sspi: true, :no_ssl_peer_verification => no_ssl_peer_verification)
 else
   fail "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
 end
