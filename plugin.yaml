@@ -6,7 +6,7 @@ date: 26.10.2015
 providers:
   - name: WinRMexe
     title: WinRM Executor
-    description: Executing Scripts or commands on remote windows computer
+    description: Executing Scripts or Commands on remote Windows computer
     service: NodeExecutor
     plugin-type: script
     script-interpreter: ruby
@@ -24,7 +24,7 @@ providers:
           instance-scope-node-attribute: "rd-winrm-krb5_realm"
       - name: user
         title: Username
-        description: "Username in DOMAIN\\name form"
+        description: "Username in DOMAIN\\name format"
         type: String
         required: false
         scope: Instance
@@ -40,7 +40,7 @@ providers:
           displayType: PASSWORD
           instance-scope-node-attribute: "rd-winrm-password"
       - name: authtype
-        title: Auth type
+        title: Authentication type
         description: "Authentication type"
         type: Select
         values: "negotiate, ssl, kerberos, plaintext"
@@ -100,7 +100,7 @@ providers:
           instance-scope-node-attribute: "rd-winrm-shell"
       - name: winrmtimeout
         title: WinRM timeout
-        description: "timeout in seconds default: 60"
+        description: "Timeout in seconds default: 60"
         type: Integer
         required: false
         scope: Instance
@@ -108,6 +108,7 @@ providers:
           instance-scope-node-attribute: "rd-winrm-timeout"
   - name: WinRMcp
     title: WinRM File Copier
+    description: Copying files to remote Windows computer
     service: FileCopier
     plugin-type: script
     script-interpreter: ruby
@@ -124,23 +125,23 @@ providers:
           instance-scope-node-attribute: "rd-winrm-krb5_realm"
       - name: user
         title: Username
+        description: "Username in DOMAIN\\name format"
         type: String
         required: false
-        description: "Username in DOMAIN\\name form"
         scope: Instance
         renderingOptions:
           instance-scope-node-attribute: "rd-winrm-user"
       - name: pass
         title: Password
+        description: "Password"
         type: String
         required: false
-        description: "Password"
         scope: Instance
         renderingOptions:
           displayType: PASSWORD
           instance-scope-node-attribute: "rd-winrm-password"
       - name: authtype
-        title: Auth type
+        title: Authentication type
         description: "Authentication type"
         type: Select
         values: "negotiate, ssl, kerberos, plaintext"
@@ -190,7 +191,7 @@ providers:
           instance-scope-node-attribute: "rd-winrm-port"
       - name: shell
         title: Shell
-        description: "Windows interpreter. Should be same as in Executor"
+        description: "Windows interpreter. Should match setting in Executor"
         type: Select
         values: "cmd, powershell, wql"
         default: 'powershell'
@@ -200,9 +201,9 @@ providers:
           instance-scope-node-attribute: "rd-winrm-shell"
       - name: winrmtimeout
         title: WinRM timeout
-        description: "timeout in seconds default: 60"
+        description: "Timeout in seconds default: 60"
         type: Integer
         required: false
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "rd-winrm-winrmtimeout"
+          instance-scope-node-attribute: "rd-winrm-timeout"

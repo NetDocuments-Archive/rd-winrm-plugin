@@ -86,11 +86,5 @@ winrm = WinRM::Connection.new(connections_opts)
 
 file_manager = WinRM::FS::FileManager.new(winrm)
 
-## upload file
+## Upload file to host
 file_manager.upload(file, dest)
-
-## upload the entire contents of my_dir to c:/foo/my_dir
-# file_manager.upload('/Users/sneal/my_dir', 'c:/foo/my_dir')
-
-## upload the entire directory contents of foo to c:\program files\bar
-# file_manager.upload('/Users/sneal/foo', '$env:ProgramFiles/bar')
