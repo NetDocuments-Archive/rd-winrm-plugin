@@ -1,6 +1,6 @@
 ## Changelog
 
-### [1.6.0.1](https://github.com/stoned/rd-winrm-plugin/releases/tag/1.6.0.1)
+### [1.6.2](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.6.0.2)
 - Use Gem winrm 2.x which permit non-administrator session, see
 https://github.com/WinRb/WinRM/issues/194
 - Use Gem winrm-fs 1.x

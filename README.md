@@ -1,15 +1,13 @@
 ## Rd-WinRM-plugin
-This is a [Rundeck Node Execution plugin][1] that uses WinRM to connect to Windows and execute commands. It uses the [WinRM for Ruby][2] Library to provide the WinRM implementation
-[1]: http://rundeck.org/docs/plugins-user-guide/node-execution-plugins
-[2]: https://github.com/WinRb/WinRM
+This is a [Rundeck Node Execution plugin](http://rundeck.org/docs/plugins-user-guide/node-execution-plugins) that uses WinRM to connect to Windows and execute commands. It uses the [WinRM for Ruby](https://github.com/WinRb/WinRM)Library to provide the WinRM implementation.
 
-Compatible with Rundeck 2.3.x+
+Compatible with Rundeck 2.9.x+
 
 ## Features
-Can run scripts, not only commands  
-Can run PowerShell, CMD and WQL not only CMD  
+Can run scripts or commands.  
+Supports PowerShell, CMD and WQL shells  
 Can avoid quoting problems (should be removed after core Rundeck fixes)  
-Can copy files to windows  
+Can copy files to Windows  
 
 ### Installation
 
@@ -18,23 +16,21 @@ Ubuntu: `apt-get install make ruby ruby-dev`
 CentOS/RHEL: `yum install make ruby ruby-devel`
 
 Install following gems:  
-`gem install winrm -v 2.1.2`  
-`gem install winrm-fs -v 1.0.1`  
-`gem install rubyntlm`
+`gem install winrm -v 2.2.3`  
+`gem install winrm-fs -v 1.0.2`  
 
 Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
 Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck. It must be named like `rd-winrm-plugin-x.x.x.zip`. There is no need to restart rundeck.
 
 ```bash
-RD_WINRM='1.5.1'
+RD_WINRM='1.6.2'
 curl https://github.com/NetDocuments/rd-winrm-plugin/archive/$RD_WINRM.zip -o /var/lib/rundeck/libext/rd-winrm-plugin-$RD_WINRM.zip
 ```
 
 Before rundeck can run commands on windows nodes, [configure winrm](https://technet.microsoft.com/en-us/magazine/ff700227.aspx) from an administrative powershell window
 
     winrm quickconfig
-
 
 ### Configuration
 Choose `WinRM Executor` as Default Node Executor  
