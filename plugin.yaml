@@ -1,5 +1,5 @@
 name: rd-winrm-plugin
-version: 1.5.1
+version: 1.6.0.2
 rundeckPluginVersion: 1.0
 author: Volodymyr Babchynskyy
 date: 26.10.2015
@@ -21,7 +21,7 @@ providers:
         description: "Kerberos Realm FQDN in capital letters"
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "krb5_realm"
+          instance-scope-node-attribute: "rd-winrm-krb5_realm"
       - name: user
         title: Username
         description: "Username in DOMAIN\\name form"
@@ -29,7 +29,7 @@ providers:
         required: false
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "user"
+          instance-scope-node-attribute: "rd-winrm-user"
       - name: pass
         title: Password
         description: "Password"
@@ -38,6 +38,7 @@ providers:
         scope: Instance
         renderingOptions:
           displayType: PASSWORD
+          instance-scope-node-attribute: "rd-winrm-password"
       - name: authtype
         title: Auth type
         description: "Authentication type"
@@ -47,7 +48,17 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "authtype"
+          instance-scope-node-attribute: "rd-winrm-authtype"
+      - name: nossl
+        title: No SSL verification
+        description: "When set to true ssl certificate validation is not performed "
+        type: Select
+        values: "true, false"
+        default: "false"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "rd-winrm-nossl"
       - name: allowoverride
         title: Allow Override
         description: "Gives possibility to override hostname, username (and password) in job options"
@@ -57,7 +68,17 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "allowoverride"
+          instance-scope-node-attribute: "rd-winrm-allowoverride"
+      - name: winrmtransport
+        title: WinRM transport protocol
+        description: "WinRM transport protocol (Default: http or https when ssl is selected for Authentication type)"
+        type: Select
+        default: "http"
+        values: "http, https"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "rd-winrm-transport"
       - name: winrmport
         title: WinRM port
         description: "WinRM port (Default: 5985/5986 for http/https)"
@@ -66,7 +87,7 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "winrmport"
+          instance-scope-node-attribute: "rd-winrm-port"
       - name: shell
         title: Shell
         description: "Windows interpreter"
@@ -76,7 +97,7 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "shell"
+          instance-scope-node-attribute: "rd-winrm-shell"
       - name: winrmtimeout
         title: WinRM timeout
         description: "timeout in seconds default: 60"
@@ -84,7 +105,7 @@ providers:
         required: false
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "winrmtimeout"
+          instance-scope-node-attribute: "rd-winrm-timeout"
   - name: WinRMcp
     title: WinRM File Copier
     service: FileCopier
@@ -100,7 +121,7 @@ providers:
         description: "Kerberos Realm FQDN in capital letters"
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "krb5_realm"
+          instance-scope-node-attribute: "rd-winrm-krb5_realm"
       - name: user
         title: Username
         type: String
@@ -108,7 +129,7 @@ providers:
         description: "Username in DOMAIN\\name form"
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "user"
+          instance-scope-node-attribute: "rd-winrm-user"
       - name: pass
         title: Password
         type: String
@@ -117,6 +138,7 @@ providers:
         scope: Instance
         renderingOptions:
           displayType: PASSWORD
+          instance-scope-node-attribute: "rd-winrm-password"
       - name: authtype
         title: Auth type
         description: "Authentication type"
@@ -126,7 +148,17 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "authtype"
+          instance-scope-node-attribute: "rd-winrm-authtype"
+      - name: nossl
+        title: No SSL verification
+        description: "When set to true ssl certificate validation is not performed "
+        type: Select
+        values: "true, false"
+        default: "false"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "rd-winrm-nossl"
       - name: allowoverride
         title: Allow Override
         description: "Gives possibility to override hostname, username (and password) in job options"
@@ -136,7 +168,17 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "allowoverride"
+          instance-scope-node-attribute: "rd-winrm-allowoverride"
+      - name: winrmtransport
+        title: WinRM transport protocol
+        description: "WinRM transport protocol (Default: http or https when ssl is selected for Authentication type)"
+        type: Select
+        default: "http"
+        values: "http, https"
+        required: true
+        scope: Instance
+        renderingOptions:
+          instance-scope-node-attribute: "rd-winrm-transport"
       - name: winrmport
         title: WinRM port
         description: "WinRM port (Default: 5985/5986 for http/https)"
@@ -145,7 +187,7 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "winrmport"
+          instance-scope-node-attribute: "rd-winrm-port"
       - name: shell
         title: Shell
         description: "Windows interpreter. Should be same as in Executor"
@@ -155,7 +197,7 @@ providers:
         required: true
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "shell"
+          instance-scope-node-attribute: "rd-winrm-shell"
       - name: winrmtimeout
         title: WinRM timeout
         description: "timeout in seconds default: 60"
@@ -163,4 +205,4 @@ providers:
         required: false
         scope: Instance
         renderingOptions:
-          instance-scope-node-attribute: "winrmtimeout"
+          instance-scope-node-attribute: "rd-winrm-winrmtimeout"
