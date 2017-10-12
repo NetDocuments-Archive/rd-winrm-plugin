@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-gem 'winrm-fs', '= 1.0.1'
+gem 'winrm-fs', '= 1.0.2'
 require 'winrm-fs'
 auth = ENV['RD_CONFIG_AUTHTYPE']
 nossl = ENV['RD_CONFIG_NOSSL'] == 'true' ? true : false
