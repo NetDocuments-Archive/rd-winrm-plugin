@@ -1,5 +1,14 @@
 ## Changelog
 
+### [1.6.2](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.6.2)
+- Use Gem winrm 2.x which permit non-administrator session, see
+https://github.com/WinRb/WinRM/issues/194
+- Use Gem winrm-fs 1.x
+- Allow WinRM transport protocol to be specified (HTTP/HTTPS) so
+HTTPS can be selected without using 'ssl' authentication type.
+- Allow empty defaut user and password at the project level, or
+above, so only "overriding" in job options can be use instead
+
 ### [1.6.0](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.6.0)
 Enables basic auth (GH-34)
 
