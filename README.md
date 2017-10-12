@@ -40,11 +40,13 @@ Settings:
 `Kerberos Realm`  Put here fqdn of your realm in case your computer is part of AD domain  
 `Username` Put here username for negotiate, plaintext or ssl auth  
 `Password` Put here password for negotiate, plaintext or ssl auth  
-`Auth type` choose here negotiate, kerberos, plaintext or ssl  
-`WinRM transport protocol` set protocol for winrm transport (Default: http)
-`WinRM port` set port for winrm (Default: 5985/5986 for http/https)  
-`Shell` choose here powershell, cmd or wql  
-`WinRM timeout` put here time in seconds (useful for long running commands)  
+`Auth type` Choose here negotiate, kerberos, plaintext or ssl  
+`NOSSL` Choose to disable SSL Validation  
+`Allow override` Allow override of variables from job options  
+`WinRM transport protocol` Set protocol for winrm transport (Default: http)
+`WinRM port` Set port for winrm (Default: 5985/5986 for http/https)  
+`Shell` Choose here powershell, cmd or wql  
+`WinRM timeout` Put here timeout in seconds (useful for long running commands)  
 
 ![](http://cl.ly/1S1D2C070Z1T/Screenshot%202016-01-05%2016.51.53.png)
 
