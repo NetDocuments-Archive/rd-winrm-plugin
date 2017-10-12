@@ -8,8 +8,6 @@ https://github.com/WinRb/WinRM/issues/194
 HTTPS can be selected without using 'ssl' authentication type.
 - Allow empty defaut user and password at the project level, or
 above, so only "overriding" in job options can be use instead
-- Mention in README the installation of Gem rubyntlm so NTLM
-authentification can be used, via authentication type 'negotiate'.
 
 ### [1.6.0](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.6.0)
 Enables basic auth (GH-34)
