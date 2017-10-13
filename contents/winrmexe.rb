@@ -36,14 +36,7 @@ end
 if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb") && !File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
   File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb")
 end
-
-# Wrapper to avoid strange and undocumented behavior of rundeck
-# Should be deleted after rundeck fix
-# https://github.com/rundeck/rundeck/issues/602
-command = command.gsub(/'"'"'' /, '\'')
-command = command.gsub(/ ''"'"'/, '\'')
-command = command.gsub(/ '"/, '"')
-command = command.gsub(/"' /, '"')
+#---
 
 # Wrapper for avoid unix style file copying then scripts run
 # - not accept chmod call
@@ -66,7 +59,9 @@ if %r{/tmp/.*\.sh}.match(command)
     command = command.gsub(/\.sh/, '.wql')
   end
 end
+#---
 
+# Output DEBUG messages
 if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts 'variables:'
   puts "realm => #{realm}"
@@ -99,6 +94,7 @@ def stderr_text(stderr)
   end
 end
 
+# Build connection options
 connections_opts = {
   endpoint: endpoint
 }
@@ -127,21 +123,48 @@ when 'ssl'
 else
   fail "Invalid authtype '#{auth}' specified, expected: negotiate, kerberos, plaintext, ssl."
 end
+#---
 
+# Create and connect session
 winrm = WinRM::Connection.new(connections_opts)
-
 shell_session = nil
 case shell
 when 'powershell'
-  shell_session = winrm.shell(:powershell)
-  result = shell_session.run(command)
+  begin
+    shell_session = winrm.shell(:powershell)
+    result = shell_session.run(command)
+  rescue => e
+    shell_session = nil
+    if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+      STDERR.print "Connection Failure: " + e.message + "\n"
+      STDERR.print e.backtrace.inspect
+      exit 1
+    else
+      STDERR.print "Connection Failure: " + e.message + "\n"
+      exit 1
+    end
+  end
 when 'cmd'
-  shell_session = winrm.shell(:cmd)
-  result = shell_session.run(command)
+  begin
+    shell_session = winrm.shell(:cmd)
+    result = shell_session.run(command)
+  rescue => e
+    shell_session = nil
+    if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+      STDERR.print "Connection Failure: " + e.message + "\n"
+      STDERR.print e.backtrace.inspect
+      exit 2
+    else
+      STDERR.print "Connection Failure: " + e.message + "\n"
+      exit 2
+    end
+  end
 when 'wql'
   result = winrm.run_wql(command)
 end
+#---
 
+# Organise output for return to Runeck
 if shell_session != nil
   STDERR.print stderr_text(result.stderr) if result.stderr != ''
   STDOUT.print result.stdout
@@ -149,3 +172,4 @@ if shell_session != nil
 else # WQL
   STDOUT.print result
 end
+#---

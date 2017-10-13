@@ -37,6 +37,7 @@ end
 if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") && !File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb")
   File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") # https://github.com/rundeck/rundeck/issues/1421
 end
+#---
 
 # Wrapper for avoid unix style file copying then scripts run
 # - not accept chmod call
@@ -52,7 +53,9 @@ if %r{/tmp/.*\.sh}.match(dest)
     dest = dest.gsub(/\.sh/, '.wql')
   end
 end
+#---
 
+# Build connection options
 connections_opts = {
   endpoint: endpoint
 }
@@ -81,10 +84,24 @@ when 'ssl'
 else
   fail "Invalid authtype '#{auth}' specified, expected: negotiate, kerberos, plaintext, ssl."
 end
+#---
 
+# Create session
 winrm = WinRM::Connection.new(connections_opts)
-
 file_manager = WinRM::FS::FileManager.new(winrm)
+#---
 
 ## Upload file to host
-file_manager.upload(file, dest)
+begin
+  file_manager.upload(file, dest)
+rescue => e
+  if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+    STDERR.print e.message + "\n"
+    STDERR.print e.backtrace.inspect
+    exit 1
+  else
+    STDERR.print e.message
+    exit 1
+  end
+end
+#---

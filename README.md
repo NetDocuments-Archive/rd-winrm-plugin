@@ -5,8 +5,7 @@ Compatible with Rundeck 2.9.x+
 
 ## Features
 Can run scripts or commands.  
-Supports PowerShell, CMD and WQL shells  
-Can avoid quoting problems (should be removed after core Rundeck fixes)  
+Supports PowerShell, CMD and WQL shells    
 Can copy files to Windows  
 
 ### Installation
@@ -18,13 +17,14 @@ CentOS/RHEL: `yum install make ruby ruby-devel`
 Install following gems:  
 `gem install winrm -v 2.2.3`  
 `gem install winrm-fs -v 1.0.2`  
+`gem install rubyntlm -v 0.6.2`  
 
 Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
 Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck. It must be named like `rd-winrm-plugin-x.x.x.zip`. There is no need to restart rundeck.
 
 ```bash
-RD_WINRM='1.6.2'
+RD_WINRM='1.7.0'
 curl https://github.com/NetDocuments/rd-winrm-plugin/archive/$RD_WINRM.zip -o /var/lib/rundeck/libext/rd-winrm-plugin-$RD_WINRM.zip
 ```
 
@@ -60,8 +60,7 @@ Settings:
 
 ### Limitations
 - Scripts in c:/tmp with .sh extension will be renamed into .ps1, .bat or .wql
-- Quotes behaviour can be strange (we trying to fix rundeck core strange behaviour, so our own also not perfect)
-- WQL execution never been tested :)
+- Quotes behaviour can be strange, [Rundeck bug](https://github.com/rundeck/rundeck/issues/602)
 
 ### Troubleshooting
 You may have some errors like ```WinRM::WinRMAuthorizationError```.  
