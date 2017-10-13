@@ -5,8 +5,7 @@ Compatible with Rundeck 2.9.x+
 
 ## Features
 Can run scripts or commands.  
-Supports PowerShell, CMD and WQL shells  
-Can avoid quoting problems (should be removed after core Rundeck fixes)  
+Supports PowerShell, CMD and WQL shells    
 Can copy files to Windows  
 
 ### Installation
@@ -61,8 +60,7 @@ Settings:
 
 ### Limitations
 - Scripts in c:/tmp with .sh extension will be renamed into .ps1, .bat or .wql
-- Quotes behaviour can be strange (we trying to fix rundeck core strange behaviour, so our own also not perfect)
-- WQL execution never been tested :)
+- Quotes behaviour can be strange, [Rundeck bug](https://github.com/rundeck/rundeck/issues/602)
 
 ### Troubleshooting
 You may have some errors like ```WinRM::WinRMAuthorizationError```.  
