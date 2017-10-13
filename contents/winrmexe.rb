@@ -133,8 +133,19 @@ winrm = WinRM::Connection.new(connections_opts)
 shell_session = nil
 case shell
 when 'powershell'
-  shell_session = winrm.shell(:powershell)
-  result = shell_session.run(command)
+  begin
+    shell_session = winrm.shell(:powershell)
+    result = shell_session.run(command)
+  rescue => e
+    if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+      STDERR.print e.message + "\n"
+      STDERR.print e.backtrace.inspect
+      exit 1
+    else
+      STDERR.print e.message
+      exit 1
+    end
+  end
 when 'cmd'
   shell_session = winrm.shell(:cmd)
   result = shell_session.run(command)
@@ -142,7 +153,7 @@ when 'wql'
   result = winrm.run_wql(command)
 end
 
-if shell_session != nil
+if result != nil
   STDERR.print stderr_text(result.stderr) if result.stderr != ''
   STDOUT.print result.stdout
   exit result.exitcode if result.exitcode !=0

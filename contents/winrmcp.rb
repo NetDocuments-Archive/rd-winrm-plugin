@@ -86,5 +86,16 @@ winrm = WinRM::Connection.new(connections_opts)
 
 file_manager = WinRM::FS::FileManager.new(winrm)
 
-## Upload file to host
-file_manager.upload(file, dest)
+begin
+  ## Upload file to host
+  file_manager.upload(file, dest)
+rescue => e
+  if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+    STDERR.print e.message + "\n"
+    STDERR.print e.backtrace.inspect
+    exit 1
+  else
+    STDERR.print e.message
+    exit 1
+  end
+end

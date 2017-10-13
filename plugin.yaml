@@ -1,6 +1,6 @@
 name: rd-winrm-plugin
 version: 1.6.2
-rundeckPluginVersion: 1.0
+rundeckPluginVersion: 1.2
 author: Volodymyr Babchynskyy
 date: 26.10.2015
 providers:
@@ -11,8 +11,8 @@ providers:
     plugin-type: script
     script-interpreter: ruby
     script-file: winrmexe.rb
-#    script-args: ${config.realm} ${config.username} ${config.password} ${node.hostname} ${exec.command}
-    interpreter-args-quoted: true
+    # script-args: ${config.realm} ${config.username} ${config.password} ${node.hostname} ${exec.command}
+    # interpreter-args-quoted: true
     config:
       - name: krb5_realm
         title: Kerberos Realm

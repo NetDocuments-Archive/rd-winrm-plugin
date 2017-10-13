@@ -18,6 +18,7 @@ CentOS/RHEL: `yum install make ruby ruby-devel`
 Install following gems:  
 `gem install winrm -v 2.2.3`  
 `gem install winrm-fs -v 1.0.2`  
+`gem install rubyntlm -v 0.6.2`  
 
 Download from the [releases page](https://github.com/NetDocuments/rd-winrm-plugin/releases).
 
