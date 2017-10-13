@@ -38,15 +38,6 @@ if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmcp.rb") && !File.executable?("#{EN
 end
 #---
 
-# Wrapper to avoid strange and undocumented behavior of rundeck
-# Should be deleted after rundeck fix
-# https://github.com/rundeck/rundeck/issues/602
-command = command.gsub(/'"'"'' /, '\'')
-command = command.gsub(/ ''"'"'/, '\'')
-command = command.gsub(/ '"/, '"')
-command = command.gsub(/"' /, '"')
-#---
-
 # Wrapper for avoid unix style file copying then scripts run
 # - not accept chmod call
 # - replace rm -f into rm -force
