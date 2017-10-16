@@ -164,7 +164,7 @@ when 'wql'
 end
 #---
 
-# Organise output for return to Runeck
+# Organise output for return to Rundeck
 if shell_session != nil
   STDERR.print stderr_text(result.stderr) if result.stderr != ''
   STDOUT.print result.stdout
