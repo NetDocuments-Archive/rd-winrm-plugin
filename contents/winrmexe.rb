@@ -73,6 +73,7 @@ if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
   puts "endpoint => #{endpoint}"
   puts "user => #{user}"
   puts 'pass => ********'
+  puts "timeout => #{timeout}"
   # puts "pass => #{pass}" # uncomment it for full auth debugging
   puts "command => #{ENV['RD_EXEC_COMMAND']}"
   puts "newcommand => #{command}"
@@ -141,11 +142,13 @@ when 'powershell'
   rescue => e
     shell_session = nil
     if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
-      STDERR.print "Connection Failure: " + e.message + "\n"
-      STDERR.print e.backtrace.inspect
+      STDERR.print "ScriptExecution failed due unhandled exception:\n"
+      STDERR.print "Exception Class: #{ e.class.name }\n"
+      STDERR.print "Exception Message: #{ e.message }\n"
+      STDERR.print "Exception Backtrace: #{ e.backtrace }\n"
       exit 1
     else
-      STDERR.print "Connection Failure: " + e.message + "\n"
+      STDERR.print "ScriptExecution failed due unhandled exception: #{ e.class.name }--#{ e.message }\n"
       exit 1
     end
   end
@@ -156,12 +159,14 @@ when 'cmd'
   rescue => e
     shell_session = nil
     if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
-      STDERR.print "Connection Failure: " + e.message + "\n"
-      STDERR.print e.backtrace.inspect
-      exit 2
+      STDERR.print "ScriptExecution failed due unhandled exception:\n"
+      STDERR.print "Exception Class: #{ e.class.name }\n"
+      STDERR.print "Exception Message: #{ e.message }\n"
+      STDERR.print "Exception Backtrace: #{ e.backtrace }\n"
+      exit 1
     else
-      STDERR.print "Connection Failure: " + e.message + "\n"
-      exit 2
+      STDERR.print "ScriptExecution failed due unhandled exception: #{ e.class.name }--#{ e.message }\n"
+      exit 1
     end
   end
 when 'wql'

@@ -99,13 +99,37 @@ file_manager = WinRM::FS::FileManager.new(winrm)
 ## Upload file to host
 begin
   file_manager.upload(file, dest)
-rescue => e
+rescue HTTPClient::ConnectTimeoutError => e #Capture Timeout on FileCopy (Server Offline)
   if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
-    STDERR.print e.message + "\n"
-    STDERR.print e.backtrace.inspect
+    STDERR.print "FileCopy failed due to Timeout:\n"
+    STDERR.print "Exception Class: #{ e.class.name }\n"
+    STDERR.print "Exception Message: #{ e.message }\n"
+    STDERR.print "Exception Backtrace: #{ e.backtrace }\n"
     exit 1
   else
-    STDERR.print e.message
+    STDERR.print "FileCopy failed due to Timeout: #{ e.class.name }--#{ e.message }\n"
+    exit 1
+  end
+rescue WinRM::WinRMAuthorizationError => e #Capture WinRM Access error (Bad WinRM config)
+  if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+    STDERR.print "FileCopy failed due to WinRM Access failure:\n"
+    STDERR.print "Exception Class: #{ e.class.name }\n"
+    STDERR.print "Exception Message: #{ e.message }\n"
+    STDERR.print "Exception Backtrace: #{ e.backtrace }\n"
+    exit 1
+  else
+    STDERR.print "FileCopy failed due to WinRM Access failure: #{ e.class.name }--#{ e.message }\n"
+    exit 1
+  end
+rescue => e
+  if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+    STDERR.print "FileCopy failed due to unhandled exception\n"
+    STDERR.print "Exception Class: #{ e.class.name }\n"
+    STDERR.print "Exception Message: #{ e.message }\n"
+    STDERR.print "Exception Backtrace: #{ e.backtrace }\n"
+    exit 1
+  else
+    STDERR.print "FileCopy failed due to unhandled exception: #{ e.class.name }--#{ e.message }\n"
     exit 1
   end
 end
