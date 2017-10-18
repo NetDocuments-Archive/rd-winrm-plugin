@@ -19,9 +19,14 @@ transport = ENV['RD_CONFIG_WINRMTRANSPORT']
 shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 override = ENV['RD_CONFIG_ALLOWOVERRIDE']
+if ENV['RD_CONFIG_WINRMTIMEOUT']
+  timeout = ENV['RD_CONFIG_WINRMTIMEOUT'].to_i
+else
+  timeout = 60
+end
 host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] && (override == 'host' || override == 'all')
 user = ENV['RD_OPTION_WINRMUSER'].dup if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
-pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'user' || override == 'all')
+pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'pass' || override == 'all')
 
 file = ARGV[1]
 dest = ARGV[2]
@@ -60,7 +65,7 @@ connections_opts = {
   endpoint: endpoint
 }
 
-connections_opts[:operation_timeout] = ENV['RD_CONFIG_WINRMTIMEOUT'].to_i if ENV['RD_CONFIG_WINRMTIMEOUT']
+connections_opts[:operation_timeout] = timeout
 
 case auth
 when 'negotiate'
