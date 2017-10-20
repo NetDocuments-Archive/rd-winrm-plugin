@@ -1,4 +1,10 @@
 ## Changelog
+### [1.7.0](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.7.0)
+- Update winrm and winrm-rf gems
+- Rewrite of connection portion of script to support new features of these gems
+- Add basic error handling to improve user friendliness of output
+- Removed non functioning quote bug fix, Rundeck's documentation is an adequate fix until bug is resolved internally
+- Added grouping to UI elements of plugin
 
 ### [1.6.2](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.6.2)
 - Use Gem winrm 2.x which permit non-administrator session, see
