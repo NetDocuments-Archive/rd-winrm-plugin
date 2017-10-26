@@ -1,24 +1,39 @@
 #!/usr/bin/ruby
-gem 'winrm-fs', '= 0.4.3'
+gem 'winrm-fs', '= 1.0.2'
 require 'winrm-fs'
 auth = ENV['RD_CONFIG_AUTHTYPE']
-user = ENV['RD_CONFIG_USER'].dup # for some reason these strings is frozen, so we duplicate it
-pass = ENV['RD_CONFIG_PASS'].dup
+nossl = ENV['RD_CONFIG_NOSSL'] == 'true' ? true : false
+if ENV['RD_CONFIG_USER'] # allow empy (default) password (override used)
+  user = ENV['RD_CONFIG_USER'].dup # for some reason this string is frozen, so we duplicate it
+else
+  user =''
+end
+if ENV['RD_CONFIG_PASS'] # allow empy (default) password (override used)
+  pass = ENV['RD_CONFIG_PASS'].dup # for some reason this string is frozen, so we duplicate it
+else
+  pass = ''
+end
 host = ENV['RD_NODE_HOSTNAME']
 port = ENV['RD_CONFIG_WINRMPORT']
+transport = ENV['RD_CONFIG_WINRMTRANSPORT']
 shell = ENV['RD_CONFIG_SHELL']
 realm = ENV['RD_CONFIG_KRB5_REALM']
 override = ENV['RD_CONFIG_ALLOWOVERRIDE']
+if ENV['RD_CONFIG_WINRMTIMEOUT']
+  timeout = ENV['RD_CONFIG_WINRMTIMEOUT'].to_i
+else
+  timeout = 60
+end
 host = ENV['RD_OPTION_WINRMHOST'] if ENV['RD_OPTION_WINRMHOST'] && (override == 'host' || override == 'all')
 user = ENV['RD_OPTION_WINRMUSER'].dup if ENV['RD_OPTION_WINRMUSER'] && (override == 'user' || override == 'all')
-pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'user' || override == 'all')
+pass = ENV['RD_OPTION_WINRMPASS'].dup if ENV['RD_OPTION_WINRMPASS'] && (override == 'pass' || override == 'all')
 
 file = ARGV[1]
 dest = ARGV[2]
 if auth == 'ssl'
   endpoint = "https://#{host}:#{port}/wsman"
 else
-  endpoint = "http://#{host}:#{port}/wsman"
+  endpoint = "#{transport}://#{host}:#{port}/wsman"
 end
 
 # Wrapper to fix: "not setting executing flags by rundeck for 2nd file in plugin"
@@ -27,6 +42,7 @@ end
 if File.exist?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") && !File.executable?("#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb")
   File.chmod(0764, "#{ENV['RD_PLUGIN_BASE']}/winrmexe.rb") # https://github.com/rundeck/rundeck/issues/1421
 end
+#---
 
 # Wrapper for avoid unix style file copying then scripts run
 # - not accept chmod call
@@ -42,29 +58,79 @@ if %r{/tmp/.*\.sh}.match(dest)
     dest = dest.gsub(/\.sh/, '.wql')
   end
 end
+#---
+
+# Build connection options
+connections_opts = {
+  endpoint: endpoint
+}
+
+connections_opts[:operation_timeout] = timeout
 
 case auth
 when 'negotiate'
-  winrm = WinRM::WinRMWebService.new(endpoint, :negotiate, user: user, pass: pass)
+  connections_opts[:transport] = :negotiate
+  connections_opts[:user] = user
+  connections_opts[:password] = pass
 when 'kerberos'
-  winrm = WinRM::WinRMWebService.new(endpoint, :kerberos, realm: realm)
+  connections_opts[:transport] = :kerberos
+  connections_opts[:realm] = realm
 when 'plaintext'
-  winrm = WinRM::WinRMWebService.new(endpoint, :plaintext, user: user, pass: pass, disable_sspi: true)
+  connections_opts[:transport] = :plaintext
+  connections_opts[:user] = user
+  connections_opts[:password] = pass
+  connections_opts[:disable_sspi] = true
 when 'ssl'
-  winrm = WinRM::WinRMWebService.new(endpoint, :ssl, user: user, pass: pass, disable_sspi: true)
+  connections_opts[:transport] = :ssl
+  connections_opts[:user] = user
+  connections_opts[:password] = pass
+  connections_opts[:disable_sspi] = true
+  connections_opts[:no_ssl_peer_verification] = nossl
 else
-  fail "Invalid authtype '#{auth}' specified, expected: kerberos, plaintext, ssl."
+  fail "Invalid authtype '#{auth}' specified, expected: negotiate, kerberos, plaintext, ssl."
 end
+#---
 
-winrm.set_timeout(ENV['RD_CONFIG_WINRMTIMEOUT'].to_i) if ENV['RD_CONFIG_WINRMTIMEOUT']
-
+# Create session
+winrm = WinRM::Connection.new(connections_opts)
 file_manager = WinRM::FS::FileManager.new(winrm)
+#---
 
-## upload file
-file_manager.upload(file, dest)
-
-## upload the entire contents of my_dir to c:/foo/my_dir
-# file_manager.upload('/Users/sneal/my_dir', 'c:/foo/my_dir')
-
-## upload the entire directory contents of foo to c:\program files\bar
-# file_manager.upload('/Users/sneal/foo', '$env:ProgramFiles/bar')
+## Upload file to host
+begin
+  file_manager.upload(file, dest)
+rescue HTTPClient::ConnectTimeoutError => e #Capture Timeout on FileCopy (Server Offline)
+  if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+    STDERR.print "FileCopy failed due to Timeout:\n"
+    STDERR.print "Exception Class: #{ e.class.name }\n"
+    STDERR.print "Exception Message: #{ e.message }\n"
+    STDERR.print "Exception Backtrace: #{ e.backtrace }\n"
+    exit 1
+  else
+    STDERR.print "FileCopy failed due to Timeout: #{ e.class.name }--#{ e.message }\n"
+    exit 1
+  end
+rescue WinRM::WinRMAuthorizationError => e #Capture WinRM Access error (Bad WinRM config)
+  if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+    STDERR.print "FileCopy failed due to WinRM Access failure:\n"
+    STDERR.print "Exception Class: #{ e.class.name }\n"
+    STDERR.print "Exception Message: #{ e.message }\n"
+    STDERR.print "Exception Backtrace: #{ e.backtrace }\n"
+    exit 1
+  else
+    STDERR.print "FileCopy failed due to WinRM Access failure: #{ e.class.name }--#{ e.message }\n"
+    exit 1
+  end
+rescue => e
+  if ENV['RD_JOB_LOGLEVEL'] == 'DEBUG'
+    STDERR.print "FileCopy failed due to unhandled exception\n"
+    STDERR.print "Exception Class: #{ e.class.name }\n"
+    STDERR.print "Exception Message: #{ e.message }\n"
+    STDERR.print "Exception Backtrace: #{ e.backtrace }\n"
+    exit 1
+  else
+    STDERR.print "FileCopy failed due to unhandled exception: #{ e.class.name }--#{ e.message }\n"
+    exit 1
+  end
+end
+#---

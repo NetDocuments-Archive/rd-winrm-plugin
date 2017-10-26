@@ -1,4 +1,19 @@
 ## Changelog
+### [1.7.0](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.7.0)
+- Update winrm and winrm-rf gems
+- Rewrite of connection portion of script to support new features of these gems
+- Add basic error handling to improve user friendliness of output
+- Removed non functioning quote bug fix, Rundeck's documentation is an adequate fix until bug is resolved internally
+- Added grouping to UI elements of plugin
+
+### [1.6.2](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.6.2)
+- Use Gem winrm 2.x which permit non-administrator session, see
+https://github.com/WinRb/WinRM/issues/194
+- Use Gem winrm-fs 1.x
+- Allow WinRM transport protocol to be specified (HTTP/HTTPS) so
+HTTPS can be selected without using 'ssl' authentication type.
+- Allow empty defaut user and password at the project level, or
+above, so only "overriding" in job options can be use instead
 
 ### [1.6.0](https://github.com/NetDocuments/rd-winrm-plugin/releases/tag/1.6.0)
 Enables basic auth (GH-34)
