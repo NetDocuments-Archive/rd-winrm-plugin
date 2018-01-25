@@ -25,7 +25,7 @@ Copy the `rd-winrm-plugin.zip` to the `libext/` directory for Rundeck. It must b
 
 ```bash
 RD_WINRM='1.7.0'
-curl https://github.com/NetDocuments/rd-winrm-plugin/archive/$RD_WINRM.zip -o /var/lib/rundeck/libext/rd-winrm-plugin-$RD_WINRM.zip
+curl -L https://github.com/NetDocuments/rd-winrm-plugin/archive/$RD_WINRM.zip -o /var/lib/rundeck/libext/rd-winrm-plugin-$RD_WINRM.zip
 ```
 
 Before rundeck can run commands on windows nodes, [configure winrm](https://technet.microsoft.com/en-us/magazine/ff700227.aspx) from an administrative powershell window
