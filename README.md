@@ -1,4 +1,11 @@
 ## Rd-WinRM-plugin
+
+**_No support_**
+
+_We are no longer using rundeck. Merge requests and bug reports still welcome. We won't be able to provide support to any issues you may encounter._
+
+---
+
 This is a [Rundeck Node Execution plugin](http://rundeck.org/docs/plugins-user-guide/node-execution-plugins) that uses WinRM to connect to Windows and execute commands. It uses the [WinRM for Ruby](https://github.com/WinRb/WinRM)Library to provide the WinRM implementation.
 
 Compatible with Rundeck 2.9.x+
